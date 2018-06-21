@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import amulp.com.justweather2.R
 import amulp.com.justweather2.databinding.WeatherFragmentBinding
 import amulp.com.justweather2.utils.toast
-import amulp.com.justweather2.utils.toastError
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
@@ -18,15 +17,13 @@ import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.PermissionChecker
 import androidx.databinding.DataBindingUtil
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import kotlinx.android.synthetic.main.weather_fragment.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.lang.Thread.sleep
-import androidx.databinding.adapters.TextViewBindingAdapter.setText
-import amulp.com.justweather2.R.id.weather
-
+import android.content.Context
+import android.location.LocationListener
+import android.location.LocationManager
 
 
 class WeatherFragment : Fragment() {
@@ -37,7 +34,7 @@ class WeatherFragment : Fragment() {
 
     private lateinit var viewModel: WeatherViewModel
     private lateinit var binding: WeatherFragmentBinding
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var locationManager: LocationManager
     private val REQUEST_PERMISSIONS_REQUEST_CODE = 34
 
     private var longitude = 0.0
@@ -50,7 +47,8 @@ class WeatherFragment : Fragment() {
                 R.layout.weather_fragment,
                 container,
                 false)
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity!!)
+
+        locationManager = activity!!.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
         return binding.root
     }
@@ -89,16 +87,8 @@ class WeatherFragment : Fragment() {
 
     @SuppressLint("MissingPermission")
     private fun getLastLocation() {
-        fusedLocationClient.lastLocation.addOnCompleteListener { task ->
-            if(task.isSuccessful && task.result!=null){
-                viewModel.getWeather(task.result)
-                updateUI()
-            }
-            else{
-                "Couldn't get location".toastError()
-            }
-
-        }
+        locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0L, 0f, locationListener);
     }
 
     private fun updateUI()
@@ -146,6 +136,23 @@ class WeatherFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private val locationListener: LocationListener = object : LocationListener {
+        @SuppressLint("MissingPermission")
+        override fun onLocationChanged(location: Location) {
+            if(location == null){
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0L, 0f, this);
+            }
+            else {
+                viewModel.getWeather(location)
+                updateUI()
+                locationManager.removeUpdates(this);
+            }
+        }
+        override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
+        override fun onProviderEnabled(provider: String) {}
+        override fun onProviderDisabled(provider: String) {}
     }
 
 }
