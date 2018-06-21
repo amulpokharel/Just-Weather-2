@@ -7,6 +7,7 @@ import android.content.Context
 import android.location.LocationManager
 import android.content.Intent
 import android.provider.Settings
+import kotlinx.android.synthetic.main.main_activity.*
 import org.jetbrains.anko.*
 
 
@@ -20,6 +21,9 @@ class MainActivity : AppCompatActivity() {
                     .replace(R.id.container, WeatherFragment.newInstance())
                     .commitNow()
         }
+
+        setSupportActionBar(toolbar)
+        toolbar.title = "Getting Location..."
     }
 
     override fun onStart() {

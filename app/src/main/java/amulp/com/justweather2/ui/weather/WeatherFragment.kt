@@ -14,7 +14,6 @@ import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.location.Location
 import android.util.Log
-import androidx.core.app.ActivityCompat
 import androidx.core.content.PermissionChecker
 import androidx.databinding.DataBindingUtil
 import kotlinx.android.synthetic.main.weather_fragment.*
@@ -24,6 +23,7 @@ import java.lang.Thread.sleep
 import android.content.Context
 import android.location.LocationListener
 import android.location.LocationManager
+import androidx.core.content.ContextCompat.checkSelfPermission
 
 
 class WeatherFragment : Fragment() {
@@ -57,7 +57,10 @@ class WeatherFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(WeatherViewModel::class.java)
 
-        weather_text.setOnClickListener { viewModel.convertTemp() }
+        weather_text.setOnClickListener {
+            viewModel.convertTemp()
+            weather_text.text = viewModel.weatherText
+        }
     }
 
     override fun onStart() {
@@ -70,15 +73,15 @@ class WeatherFragment : Fragment() {
     }
 
     private fun checkPermissions() =
-            ActivityCompat.checkSelfPermission(activity!!.baseContext, Manifest.permission.ACCESS_FINE_LOCATION) == PermissionChecker.PERMISSION_GRANTED
+            checkSelfPermission(activity!!.baseContext, Manifest.permission.ACCESS_FINE_LOCATION) == PermissionChecker.PERMISSION_GRANTED
 
     private fun startLocationPermissionRequest() {
-        ActivityCompat.requestPermissions(activity!!, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+        requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 REQUEST_PERMISSIONS_REQUEST_CODE)
     }
 
     private fun requestPermissions() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(activity!!, Manifest.permission.ACCESS_FINE_LOCATION)) {
+        if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
             startLocationPermissionRequest()
         } else {
             startLocationPermissionRequest()
@@ -87,21 +90,28 @@ class WeatherFragment : Fragment() {
 
     @SuppressLint("MissingPermission")
     private fun getLastLocation() {
-        locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0L, 0f, locationListener);
+        try {
+            val loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+            viewModel.getWeather(loc)
+            updateUI()
+        }
+        catch (e:Exception)
+        {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0L, 0f, locationListener);
+        }
     }
 
     private fun updateUI()
     {
         doAsync {
             while(!viewModel.dataChanged){
-                sleep(300)
+                sleep(1000)
             }
             uiThread {
                 viewModel.dataChanged = false
                 weather_icon.text = viewModel.weatherIcon
                 weather_text.text = viewModel.weatherText
-                location_name.text = viewModel.locationName
+                activity!!.title = viewModel.locationName
                 humidity.text = viewModel.humidity
                 pressure.text = viewModel.pressure
                 last_update.text = viewModel.lastUpdate
@@ -141,14 +151,9 @@ class WeatherFragment : Fragment() {
     private val locationListener: LocationListener = object : LocationListener {
         @SuppressLint("MissingPermission")
         override fun onLocationChanged(location: Location) {
-            if(location == null){
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0L, 0f, this);
-            }
-            else {
-                viewModel.getWeather(location)
-                updateUI()
-                locationManager.removeUpdates(this);
-            }
+            viewModel.getWeather(location)
+            updateUI()
+            locationManager.removeUpdates(this);
         }
         override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
         override fun onProviderEnabled(provider: String) {}
