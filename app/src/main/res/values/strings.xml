@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Just Weather 2</string>
+    <string name="w01d"></string>
+    <string name="w02d"></string>
+    <string name="w03d"></string>
+    <string name="w04d"></string>
+    <string name="w09d"></string>
+    <string name="w10d"></string>
+    <string name="w11d"></string>
+    <string name="w13d"></string>
+    <string name="w50d"></string>
+
+    <string name="w01n"></string>
+    <string name="w02n"></string>
+    <string name="w03n"></string>
+    <string name="w04n"></string>
+    <string name="w09n"></string>
+    <string name="w10n"></string>
+    <string name="w11n"></string>
+    <string name="w13n"></string>
+    <string name="w50n"></string>
+
+</resources>
