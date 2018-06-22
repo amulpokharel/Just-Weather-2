@@ -76,7 +76,6 @@ class WeatherViewModel : ViewModel() {
         weatherIcon = "w" + response.weather!![0].icon
 
         dataChanged = true
-        //set icons
     }
 
     fun convertTemp() {
