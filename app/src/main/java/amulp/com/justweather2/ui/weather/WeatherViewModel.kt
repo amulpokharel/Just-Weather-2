@@ -1,7 +1,5 @@
 package amulp.com.justweather2.ui.weather
 
-
-import amulp.com.justweather2.MyApp
 import android.content.SharedPreferences
 import android.location.Location
 import androidx.lifecycle.ViewModel
@@ -18,7 +16,7 @@ import java.util.*
 
 
 class WeatherViewModel : ViewModel() {
-    private lateinit var service: WeatherService
+    private var service: WeatherService
     private var weatherResponse: WeatherResponse? = null
     private val UPDATE_INTERVAL = 600000
 
@@ -30,10 +28,10 @@ class WeatherViewModel : ViewModel() {
     var pressure = "Pressure"
     var lastUpdate = "Updated: "
 
-    var lastChecked: Long = 0
-    var loc: Location? = null
-    var currentTemp: Temperature? = null
-    var currentUnit = "c"
+    private var lastChecked: Long = 0
+    private var loc: Location? = null
+    private var currentTemp: Temperature? = null
+    private var currentUnit = "c"
 
     var dataChanged = false
 
@@ -83,15 +81,19 @@ class WeatherViewModel : ViewModel() {
 
     fun convertTemp() {
         val tempString:String
-        if (currentUnit == "c") {
-            tempString = currentTemp!!.inFahrenheit().toString() + " °F"
-            currentUnit = "f"
-        } else if (currentUnit == "f") {
-            tempString = currentTemp!!.inKelvin().toString() + " °K"
-            currentUnit = "k"
-        } else {
-            tempString = currentTemp!!.inCelsius().toString() + " °C"
-            currentUnit = "c"
+        when (currentUnit) {
+            "c" -> {
+                tempString = currentTemp!!.inFahrenheit().toString() + " °F"
+                currentUnit = "f"
+            }
+            "f" -> {
+                tempString = currentTemp!!.inKelvin().toString() + " °K"
+                currentUnit = "k"
+            }
+            else -> {
+                tempString = currentTemp!!.inCelsius().toString() + " °C"
+                currentUnit = "c"
+            }
         }
 
         weatherText = tempString

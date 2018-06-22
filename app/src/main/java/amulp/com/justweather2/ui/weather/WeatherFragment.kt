@@ -97,7 +97,7 @@ class WeatherFragment : Fragment() {
         }
         catch (e:Exception)
         {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0L, 0f, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0L, 0f, locationListener)
         }
     }
 
@@ -153,7 +153,7 @@ class WeatherFragment : Fragment() {
         override fun onLocationChanged(location: Location) {
             viewModel.getWeather(location)
             updateUI()
-            locationManager.removeUpdates(this);
+            locationManager.removeUpdates(this)
         }
         override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
         override fun onProviderEnabled(provider: String) {}
