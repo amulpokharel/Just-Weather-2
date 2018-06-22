@@ -7,6 +7,7 @@ import android.content.Context
 import android.location.LocationManager
 import android.content.Intent
 import android.provider.Settings
+import androidx.appcompat.app.ActionBar
 import kotlinx.android.synthetic.main.main_activity.*
 import org.jetbrains.anko.*
 
@@ -24,6 +25,12 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(toolbar)
         toolbar.title = "Getting Location..."
+
+        val actionbar: ActionBar? = supportActionBar
+        actionbar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.ic_burger)
+        }
     }
 
     override fun onStart() {

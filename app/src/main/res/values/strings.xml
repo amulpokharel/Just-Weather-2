@@ -1,5 +1,11 @@
 <resources>
     <string name="app_name">Just Weather 2</string>
+
+    <string name="default_temp">0 °C</string>
+    <string name="default_humidity">Humidity</string>
+    <string name="default_pressure">Pressure</string>
+    <string name="last_update">Last Updated: </string>
+
     <string name="w01d"></string>
     <string name="w02d"></string>
     <string name="w03d"></string>
