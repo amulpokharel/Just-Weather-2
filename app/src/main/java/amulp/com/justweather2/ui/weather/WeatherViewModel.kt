@@ -8,6 +8,7 @@ import amulp.com.justweather2.models.WeatherResponse
 import amulp.com.justweather2.rest.RetrofitClient
 import amulp.com.justweather2.rest.WeatherService
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.text.SimpleDateFormat
 import java.util.*
@@ -19,6 +20,7 @@ class WeatherViewModel : ViewModel() {
     private var service: WeatherService
     private var weatherResponse: WeatherResponse? = null
     private val UPDATE_INTERVAL = 600000
+    private var disposable = CompositeDisposable()
 
     //UI Variables
     var weatherIcon = "\uF07B"
@@ -47,16 +49,22 @@ class WeatherViewModel : ViewModel() {
     fun getWeather(location:Location){
         loc = location
         if(System.currentTimeMillis() >= (lastChecked + UPDATE_INTERVAL)) {
-            service.getWeather(location.longitude, location.latitude)
+            disposable.add(service.getWeather(location.longitude, location.latitude)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe { result ->
+                        weatherResponse = result
                         lastChecked = System.currentTimeMillis()
                         processWeather(result)
-                    }
+                    })
         }
         else
             dataChanged = true
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        disposable.dispose()
     }
 
     private fun processWeather(response: WeatherResponse){
