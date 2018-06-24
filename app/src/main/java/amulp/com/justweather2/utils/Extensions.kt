@@ -1,12 +1,12 @@
 package amulp.com.justweather2.utils
 
+import amulp.com.justweather2.MyApp
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import amulp.com.justweather2.MyApp
 
 fun ViewGroup.inflate(layoutRes: Int): View {
     return LayoutInflater.from(context).inflate(layoutRes, this, false)

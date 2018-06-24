@@ -7,6 +7,7 @@ import android.content.Context
 import android.location.LocationManager
 import android.content.Intent
 import android.provider.Settings
+import android.view.Menu
 import androidx.appcompat.app.ActionBar
 import kotlinx.android.synthetic.main.main_activity.*
 import org.jetbrains.anko.*
@@ -45,6 +46,11 @@ class MainActivity : AppCompatActivity() {
                 noButton { toast("App will not work without location")}
             }.show()
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu, menu)
+        return super.onCreateOptionsMenu(menu)
     }
 
     private fun enableLocationSettings() {

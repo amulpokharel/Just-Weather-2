@@ -3,9 +3,6 @@ package amulp.com.justweather2.ui.weather
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import amulp.com.justweather2.R
 import amulp.com.justweather2.databinding.WeatherFragmentBinding
 import amulp.com.justweather2.utils.toast
@@ -23,8 +20,8 @@ import java.lang.Thread.sleep
 import android.content.Context
 import android.location.LocationListener
 import android.location.LocationManager
+import android.view.*
 import androidx.core.content.ContextCompat.checkSelfPermission
-
 
 class WeatherFragment : Fragment() {
 
@@ -37,9 +34,6 @@ class WeatherFragment : Fragment() {
     private lateinit var locationManager: LocationManager
     private val REQUEST_PERMISSIONS_REQUEST_CODE = 34
 
-    private var longitude = 0.0
-    private var latitude = 0.0
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
 
@@ -49,6 +43,7 @@ class WeatherFragment : Fragment() {
                 false)
 
         locationManager = activity!!.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        setHasOptionsMenu(true)
 
         return binding.root
     }
@@ -63,8 +58,25 @@ class WeatherFragment : Fragment() {
         }
     }
 
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item!!.itemId){
+            R.id.location_update ->{
+                    if(viewModel.canUpdate())
+                        startUpdate()
+                    else
+                        "Can't update yet".toast()
+                }
+            }
+
+        return super.onOptionsItemSelected(item)
+    }
+
     override fun onStart() {
         super.onStart()
+        startUpdate()
+    }
+
+    private fun startUpdate(){
         if (!checkPermissions()) {
             requestPermissions()
         } else {
@@ -91,9 +103,16 @@ class WeatherFragment : Fragment() {
     @SuppressLint("MissingPermission")
     private fun getLastLocation() {
         try {
-            val loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-            viewModel.getWeather(loc)
-            updateUI()
+            if(viewModel.canUpdate()) {
+                val loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+                viewModel.getWeather(loc)
+                updateUI()
+            }
+            else{
+                viewModel.dataChanged = true
+                updateUI()
+            }
+
         }
         catch (e:Exception)
         {

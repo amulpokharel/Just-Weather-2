@@ -5,6 +5,8 @@
     <string name="default_humidity">Humidity</string>
     <string name="default_pressure">Pressure</string>
     <string name="last_update">Last Updated: </string>
+    <string name="location_update">Update Location</string>
+    <string name="settings">Settings</string>
 
     <string name="w01d"></string>
     <string name="w02d"></string>
