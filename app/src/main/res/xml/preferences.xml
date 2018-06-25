@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:key="checkbox_pref"
+
+    android:title="Check Box Preferences">
+
+    <CheckBoxPreference
+
+        android:key="pref_opt1"
+
+        android:title="Opt 1"
+
+        android:summary="option 1"
+
+        android:defaultValue="true"/>
+
+    <CheckBoxPreference
+
+        android:key="pref_opt2"
+
+        android:title="Opt 2"
+
+        android:summary="option 2" />
+
+    <CheckBoxPreference
+
+        android:key="pref_opt3"
+
+        android:title="Opt 3"
+
+        android:summary="option 3" />
+
+    <CheckBoxPreference
+
+        android:key="pref_opt4"
+
+        android:title="Opt 4"
+
+        android:summary="option 4" />
+
+</PreferenceScreen>
