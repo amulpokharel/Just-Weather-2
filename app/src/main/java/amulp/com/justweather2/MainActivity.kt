@@ -10,61 +10,40 @@ import android.content.Intent
 import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.app.ActionBar
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
-import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.main_activity.*
 import org.jetbrains.anko.*
 
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var mDrawerLayout: DrawerLayout
-    var currentItem = R.id.nav_weather
-
+    var currentLocation = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
+
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, WeatherFragment.newInstance())
+                    .replace(R.id.container, WeatherFragment.newInstance(), "weather")
                     .commitNow()
-        }
-        mDrawerLayout = findViewById(R.id.drawer_layout)
-
-        val navigationView: NavigationView = findViewById(R.id.navigation_view)
-        navigationView.setCheckedItem(R.id.nav_weather)
-        navigationView.setNavigationItemSelectedListener { menuItem ->
-            menuItem.isChecked = true
-            mDrawerLayout.closeDrawers()
-
-            if (currentItem != menuItem.itemId)
-            when(menuItem.itemId){
-                R.id.nav_weather -> {
-                    currentItem = R.id.nav_weather
-                    supportFragmentManager.beginTransaction()
-                            .replace(R.id.container, WeatherFragment.newInstance())
-                            .commitNow()
-                }
-                R.id.nav_settings ->{
-                    currentItem = R.id.nav_settings
-                    title = "Settings"
-                    toolbar.menu
-                    supportFragmentManager.beginTransaction()
-                            .replace(R.id.container, SettingsFragment.newInstance())
-                            .commitNow()
-                }
-            }
-
-            true
         }
         setSupportActionBar(toolbar)
 
         val actionBar = supportActionBar
         actionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
-            setHomeAsUpIndicator(R.drawable.ic_burger)
+            setHomeAsUpIndicator(R.drawable.ic_location)
+        }
+
+        supportFragmentManager.addOnBackStackChangedListener {
+            if(supportFragmentManager.findFragmentByTag("settings") is SettingsFragment){
+                actionBar?.setHomeAsUpIndicator(R.drawable.ic_back)
+                currentLocation  = actionBar?.title.toString()
+                actionBar?.setTitle("Settings")
+            }
+            else { // todo change if more fragments are added
+                actionBar?.setHomeAsUpIndicator(R.drawable.ic_location)
+                actionBar?.title = currentLocation
+            }
         }
     }
 
@@ -89,8 +68,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            android.R.id.home -> {
-                mDrawerLayout.openDrawer(GravityCompat.START)
+            R.id.settings_update ->{
+                supportFragmentManager.beginTransaction()
+                        .replace(R.id.container, SettingsFragment.newInstance(), "settings")
+                        .addToBackStack(null)
+                        .commit()
                 true
             }
             else -> super.onOptionsItemSelected(item)

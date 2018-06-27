@@ -1,21 +1,34 @@
 package amulp.com.justweather2.ui.settings
 
 import amulp.com.justweather2.R
+import android.app.ActionBar
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.preference.PreferenceFragmentCompat
+import kotlinx.android.synthetic.main.main_activity.*
 
 class SettingsFragment: PreferenceFragmentCompat(){
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey);
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = super.onCreateView(inflater, container, savedInstanceState)
-        view!!.setBackgroundColor(resources.getColor(R.color.colorPrimary))
-        return view
+    override fun onCreate(savedInstanceState: Bundle?) {
+        setHasOptionsMenu(true);
+        super.onCreate(savedInstanceState)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        menu!!.clear()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item!!.itemId){
+            android.R.id.home ->{
+                activity!!.onBackPressed()
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     companion object {

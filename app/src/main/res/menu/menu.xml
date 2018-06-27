@@ -1,8 +1,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/location_update"
-        android:icon="@drawable/ic_location"
-        android:title="@string/location_update"
+        android:id="@+id/settings_update"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/settings"
         app:showAsAction="ifRoom"/>
 </menu>

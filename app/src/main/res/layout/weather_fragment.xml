@@ -8,7 +8,6 @@
         android:id="@+id/weather"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimary"
         tools:context=".ui.weather.WeatherFragment">
 
         <TextView
@@ -23,7 +22,6 @@
             android:fontFamily="@font/weatherfont"
             android:gravity="center"
             android:textAlignment="center"
-            android:textColor="@color/textColorPrimary"
             android:textSize="100sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -46,7 +44,6 @@
             android:gravity="center"
             android:text="@string/default_temp"
             android:textAlignment="center"
-            android:textColor="@color/textColorPrimary"
             android:textSize="50sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -64,7 +61,6 @@
             android:gravity="center"
             android:text="@string/default_humidity"
             android:textAlignment="center"
-            android:textColor="@color/textColorPrimary"
             android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -83,7 +79,6 @@
             android:gravity="center"
             android:text="@string/default_pressure"
             android:textAlignment="center"
-            android:textColor="@color/textColorPrimary"
             android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -103,7 +98,6 @@
             android:gravity="center"
             android:text="@string/last_update"
             android:textAlignment="center"
-            android:textColor="@color/textColorPrimary"
             android:textSize="12sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -60,7 +60,7 @@ class WeatherFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item!!.itemId){
-            R.id.location_update ->{
+            android.R.id.home ->{
                     if(viewModel.canUpdate())
                         startUpdate()
                     else
