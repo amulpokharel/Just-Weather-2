@@ -7,48 +7,65 @@ import amulp.com.justweather2.ui.weather.WeatherFragment
 import android.content.Context
 import android.location.LocationManager
 import android.content.Intent
+import android.content.SharedPreferences
 import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.ActionBar
+import androidx.fragment.app.FragmentTransaction
 import kotlinx.android.synthetic.main.main_activity.*
 import org.jetbrains.anko.*
 
 
-class MainActivity : AppCompatActivity() {
-
-    var currentLocation = ""
+class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
     override fun onCreate(savedInstanceState: Bundle?) {
+        if(defaultSharedPreferences.getBoolean(getString(R.string.pref_dark_mode), false)) {
+            MyApp.darkMode = true
+            setTheme(R.style.AppThemeDark)
+        }
+        else {
+            MyApp.darkMode = false
+            setTheme(R.style.AppTheme)
+        }
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
 
+
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, WeatherFragment.newInstance(), "weather")
-                    .commitNow()
+                    .replace(R.id.container, WeatherFragment.newInstance(), "current")
+                    .commit()
         }
+
         setSupportActionBar(toolbar)
 
         val actionBar = supportActionBar
+
         actionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
-            setHomeAsUpIndicator(R.drawable.ic_location)
+            if(supportFragmentManager.findFragmentByTag("current") is SettingsFragment)
+                setHomeAsUpIndicator(R.drawable.ic_back)
+            else
+                setHomeAsUpIndicator(R.drawable.ic_location)
         }
 
         supportFragmentManager.addOnBackStackChangedListener {
-            if(supportFragmentManager.findFragmentByTag("settings") is SettingsFragment){
+            if(supportFragmentManager.findFragmentByTag("current") is SettingsFragment){
                 actionBar?.setHomeAsUpIndicator(R.drawable.ic_back)
-                currentLocation  = actionBar?.title.toString()
                 actionBar?.setTitle("Settings")
             }
             else { // todo change if more fragments are added
                 actionBar?.setHomeAsUpIndicator(R.drawable.ic_location)
-                actionBar?.title = currentLocation
+                actionBar?.title = MyApp.currentLocation
             }
         }
     }
 
     override fun onStart() {
         super.onStart()
+
+        attachSharedPrefListener()
 
         val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
@@ -61,6 +78,33 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        attachSharedPrefListener()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        detachSharedPrefListener()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        detachSharedPrefListener()
+    }
+
+    private fun attachSharedPrefListener() = defaultSharedPreferences.registerOnSharedPreferenceChangeListener(this)
+    private fun detachSharedPrefListener() = defaultSharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
+
+
+    override fun onSharedPreferenceChanged(prefs:SharedPreferences, key: String) {
+        when (key) {
+            getString(R.string.pref_dark_mode) -> {
+                recreate()
+            }
+        }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu, menu)
         return super.onCreateOptionsMenu(menu)
@@ -70,7 +114,8 @@ class MainActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.settings_update ->{
                 supportFragmentManager.beginTransaction()
-                        .replace(R.id.container, SettingsFragment.newInstance(), "settings")
+                        .setTransition( FragmentTransaction.TRANSIT_FRAGMENT_OPEN )
+                        .replace(R.id.container, SettingsFragment.newInstance(), "current")
                         .addToBackStack(null)
                         .commit()
                 true

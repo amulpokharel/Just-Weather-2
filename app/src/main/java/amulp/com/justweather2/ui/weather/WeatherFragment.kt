@@ -1,10 +1,10 @@
 package amulp.com.justweather2.ui.weather
 
+import amulp.com.justweather2.MyApp
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import amulp.com.justweather2.R
-import amulp.com.justweather2.databinding.WeatherFragmentBinding
 import amulp.com.justweather2.utils.toast
 import android.Manifest
 import android.annotation.SuppressLint
@@ -12,7 +12,6 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.util.Log
 import androidx.core.content.PermissionChecker
-import androidx.databinding.DataBindingUtil
 import kotlinx.android.synthetic.main.weather_fragment.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
@@ -22,6 +21,9 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.view.*
 import androidx.core.content.ContextCompat.checkSelfPermission
+import android.view.LayoutInflater
+import kotlinx.android.synthetic.main.notification_template_lines_media.*
+
 
 class WeatherFragment : Fragment() {
 
@@ -30,22 +32,16 @@ class WeatherFragment : Fragment() {
     }
 
     private lateinit var viewModel: WeatherViewModel
-    private lateinit var binding: WeatherFragmentBinding
     private lateinit var locationManager: LocationManager
     private val REQUEST_PERMISSIONS_REQUEST_CODE = 34
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
 
-        binding = DataBindingUtil.inflate(inflater,
-                R.layout.weather_fragment,
-                container,
-                false)
-
         locationManager = activity!!.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         setHasOptionsMenu(true)
 
-        return binding.root
+        return inflater.inflate(R.layout.weather_fragment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -131,6 +127,7 @@ class WeatherFragment : Fragment() {
                 weather_icon.text = viewModel.weatherIcon
                 weather_text.text = viewModel.weatherText
                 activity!!.title = viewModel.locationName
+                MyApp.currentLocation = viewModel.locationName
                 humidity.text = viewModel.humidity
                 pressure.text = viewModel.pressure
                 last_update.text = viewModel.lastUpdate

@@ -9,6 +9,7 @@
     <string name="weather">Current Weather</string>
     <string name="settings">Settings</string>
     <string name="about">About</string>
+    <string name="pref_dark_mode">Dark Mode</string>
 
 
     <string name="w01d"></string>
