@@ -1,28 +1,29 @@
 package amulp.com.justweather2.ui.weather
 
 import amulp.com.justweather2.MyApp
-import androidx.lifecycle.ViewModelProviders
-import android.os.Bundle
-import androidx.fragment.app.Fragment
 import amulp.com.justweather2.R
 import amulp.com.justweather2.utils.toast
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
+import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.core.content.PermissionChecker
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.weather_fragment.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.lang.Thread.sleep
-import android.content.Context
-import android.location.LocationListener
-import android.location.LocationManager
-import android.view.*
-import androidx.core.content.ContextCompat.checkSelfPermission
-import android.view.LayoutInflater
-import kotlinx.android.synthetic.main.notification_template_lines_media.*
 
 
 class WeatherFragment : Fragment() {

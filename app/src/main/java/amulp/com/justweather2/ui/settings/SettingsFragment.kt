@@ -1,20 +1,19 @@
 package amulp.com.justweather2.ui.settings
 
 import amulp.com.justweather2.R
-import android.app.ActionBar
-import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import androidx.preference.PreferenceFragmentCompat
-import kotlinx.android.synthetic.main.main_activity.*
 
 class SettingsFragment: PreferenceFragmentCompat(){
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        setPreferencesFromResource(R.xml.preferences, rootKey);
+        setPreferencesFromResource(R.xml.preferences, rootKey)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setHasOptionsMenu(true);
+        setHasOptionsMenu(true)
         activity!!.title = "Settings"
         super.onCreate(savedInstanceState)
     }

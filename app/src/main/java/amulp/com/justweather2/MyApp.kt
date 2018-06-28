@@ -1,6 +1,4 @@
 package amulp.com.justweather2
-import amulp.com.justweather2.utils.PrefHelper.defaultPrefs
-import amulp.com.justweather2.utils.PrefHelper.get
 import android.app.Application
 import android.content.Context
 

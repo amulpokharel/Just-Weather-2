@@ -11,7 +11,6 @@ import android.content.SharedPreferences
 import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.app.ActionBar
 import androidx.fragment.app.FragmentTransaction
 import kotlinx.android.synthetic.main.main_activity.*
 import org.jetbrains.anko.*
