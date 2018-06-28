@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <CheckBoxPreference
+    <SwitchPreference
         android:key="Dark Mode"
         android:title="Dark Theme"
         android:summary="Enable Dark Theme"
         android:defaultValue="false" />
+
+    <ListPreference
+        android:key="current unit"
+        android:title="Current Temperature Unit"
+        android:summary="%s"
+        android:entries="@array/units"
+        android:entryValues="@array/unit_values"/>
 </PreferenceScreen>

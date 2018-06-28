@@ -76,6 +76,20 @@ class WeatherViewModel : ViewModel() {
             dataChanged = true
     }
 
+    fun updateUnit(){
+        if(prefs["current unit","c"] != currentUnit)
+        {
+            currentUnit  = prefs["current unit","c"]
+            when(currentUnit){
+                "c" -> weatherText = currentTemp!!.inCelsius().toString() + " °C"
+                "f" -> weatherText = currentTemp!!.inFahrenheit().toString() + " °F"
+                "k" -> weatherText = currentTemp!!.inKelvin().toString() + " °K"
+            }
+
+            prefs["weather text"] = weatherText
+        }
+    }
+
     override fun onCleared() {
         super.onCleared()
         disposable.dispose()
@@ -105,31 +119,6 @@ class WeatherViewModel : ViewModel() {
         prefs["location"] = locationName
         prefs["weather icon"] = weatherIcon
         prefs["current temp"] = currentTemp!!.inCelsius()
-    }
-
-    fun convertTemp() {
-        val tempString:String
-        when (currentUnit) {
-            "c" -> {
-                tempString = currentTemp!!.inFahrenheit().toString() + " °F"
-                currentUnit = "f"
-                prefs["current unit"] = "f"
-            }
-            "f" -> {
-                tempString = currentTemp!!.inKelvin().toString() + " °K"
-                currentUnit = "k"
-                prefs["current unit"] = "k"
-            }
-            else -> {
-                tempString = currentTemp!!.inCelsius().toString() + " °C"
-                currentUnit = "c"
-                prefs["current unit"] = "c"
-            }
-        }
-
-        weatherText = tempString
-
-        prefs["weather text"] = weatherText
     }
 
     fun canUpdate() : Boolean = System.currentTimeMillis() >= (lastChecked!! + UPDATE_INTERVAL)

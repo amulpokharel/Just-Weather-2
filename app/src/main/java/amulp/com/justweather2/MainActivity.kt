@@ -101,6 +101,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             getString(R.string.pref_dark_mode) -> {
                 recreate()
             }
+            "current unit" -> {
+
+            }
         }
     }
 

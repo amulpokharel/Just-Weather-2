@@ -48,11 +48,12 @@ class WeatherFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(WeatherViewModel::class.java)
+    }
 
-        weather_text.setOnClickListener {
-            viewModel.convertTemp()
-            weather_text.text = viewModel.weatherText
-        }
+    override fun onResume() {
+        super.onResume()
+        viewModel.updateUnit()
+        weather_text.text = viewModel.weatherText
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
