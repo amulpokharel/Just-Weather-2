@@ -54,10 +54,7 @@ class WeatherFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         viewModel.updateUnit()
-        weather_text.text = viewModel.weatherText
-        humidity.text = viewModel.humidity
-        pressure.text = viewModel.pressure
-        last_update.text = viewModel.lastUpdate
+        updateUIElements()
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -131,22 +128,25 @@ class WeatherFragment : Fragment() {
             }
             uiThread {
                 viewModel.dataChanged = false
-                weather_icon.text = viewModel.weatherIcon
-                weather_text.text = viewModel.weatherText
-                activity!!.title = viewModel.locationName
-                MyApp.currentLocation = viewModel.locationName
-                humidity.text = viewModel.humidity
-                pressure.text = viewModel.pressure
-                last_update.text = viewModel.lastUpdate
-
-                val resourceID = activity!!.applicationContext.resources.getIdentifier(viewModel.weatherIcon, "string", activity!!.packageName)
-
-                if (resourceID != 0)
-                    weather_icon.text = getString(resourceID)
-
+                updateUIElements()
             }
 
         }
+    }
+
+    private fun updateUIElements(){
+        weather_icon.text = viewModel.weatherIcon
+        weather_text.text = viewModel.weatherText
+        activity!!.title = viewModel.locationName
+        MyApp.currentLocation = viewModel.locationName
+        humidity.text = viewModel.humidity
+        pressure.text = viewModel.pressure
+        last_update.text = viewModel.lastUpdate
+
+        val resourceID = activity!!.applicationContext.resources.getIdentifier(viewModel.weatherIcon, "string", activity!!.packageName)
+
+        if (resourceID != 0)
+            weather_icon.text = getString(resourceID)
     }
 
     override fun onRequestPermissionsResult(
