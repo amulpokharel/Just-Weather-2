@@ -68,12 +68,37 @@
                                           </PersistentState>
                                         </value>
                                       </entry>
+                                      <entry key="foregroundText">
+                                        <value>
+                                          <PersistentState>
+                                            <option name="values">
+                                              <map>
+                                                <entry key="color" value="ffffff" />
+                                                <entry key="scalingPercent" value="94" />
+                                              </map>
+                                            </option>
+                                          </PersistentState>
+                                        </value>
+                                      </entry>
+                                      <entry key="foregroundTextAsset">
+                                        <value>
+                                          <PersistentState>
+                                            <option name="values">
+                                              <map>
+                                                <entry key="fontFamily" value="Weather Icons" />
+                                                <entry key="text" value="" />
+                                              </map>
+                                            </option>
+                                          </PersistentState>
+                                        </value>
+                                      </entry>
                                     </map>
                                   </option>
                                   <option name="values">
                                     <map>
                                       <entry key="backgroundAssetType" value="COLOR" />
-                                      <entry key="backgroundColor" value="f4f4f4" />
+                                      <entry key="backgroundColor" value="117693" />
+                                      <entry key="foregroundAssetType" value="TEXT" />
                                       <entry key="foregroundImage" value="$USER_HOME$/Documents/icon fixed.png" />
                                     </map>
                                   </option>
