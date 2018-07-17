@@ -55,6 +55,9 @@ class WeatherFragment : Fragment() {
         super.onResume()
         viewModel.updateUnit()
         weather_text.text = viewModel.weatherText
+        humidity.text = viewModel.humidity
+        pressure.text = viewModel.pressure
+        last_update.text = viewModel.lastUpdate
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
