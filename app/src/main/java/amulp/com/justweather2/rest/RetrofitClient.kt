@@ -1,6 +1,6 @@
-package com.amulp.justweather.rest
+package amulp.com.justweather2.rest
 
-import com.amulp.justweather.utils.toastError
+import amulp.com.justweather2.utils.toastError
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

@@ -1,4 +1,4 @@
-package com.amulp.justweather
+package amulp.com.justweather2
 import android.app.Application
 import android.content.Context
 

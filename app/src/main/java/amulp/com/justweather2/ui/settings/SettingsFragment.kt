@@ -1,6 +1,6 @@
-package com.amulp.justweather.ui.settings
+package amulp.com.justweather2.ui.settings
 
-import com.amulp.justweather.R
+import amulp.com.justweather2.R
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater

@@ -1,9 +1,9 @@
-package com.amulp.justweather.rest
+package amulp.com.justweather2.rest
 
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-import com.amulp.justweather.models.WeatherResponse
+import amulp.com.justweather2.models.WeatherResponse
 import io.reactivex.Single
 
 /**

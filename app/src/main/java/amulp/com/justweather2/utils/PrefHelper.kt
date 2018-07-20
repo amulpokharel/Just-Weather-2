@@ -1,4 +1,4 @@
-package com.amulp.justweather.utils
+package amulp.com.justweather2.utils
 
 import android.content.Context
 import android.content.SharedPreferences

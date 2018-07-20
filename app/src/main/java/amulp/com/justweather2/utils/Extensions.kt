@@ -1,6 +1,6 @@
-package com.amulp.justweather.utils
+package amulp.com.justweather2.utils
 
-import com.amulp.justweather.MyApp
+import amulp.com.justweather2.MyApp
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater

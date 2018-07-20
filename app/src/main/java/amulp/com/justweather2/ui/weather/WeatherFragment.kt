@@ -1,8 +1,8 @@
-package com.amulp.justweather.ui.weather
+package amulp.com.justweather2.ui.weather
 
-import com.amulp.justweather.MyApp
-import com.amulp.justweather.R
-import com.amulp.justweather.utils.toast
+import amulp.com.justweather2.MyApp
+import amulp.com.justweather2.R
+import amulp.com.justweather2.utils.toast
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context

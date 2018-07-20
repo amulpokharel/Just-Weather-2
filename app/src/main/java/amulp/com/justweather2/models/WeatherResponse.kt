@@ -1,6 +1,6 @@
-package com.amulp.justweather.models
+package amulp.com.justweather2.models
 
-import com.amulp.justweather.models.*
+import amulp.com.justweather2.models.*
 import com.squareup.moshi.Json
 
 class WeatherResponse {

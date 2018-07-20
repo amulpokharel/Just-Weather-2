@@ -1,15 +1,15 @@
-package com.amulp.justweather.ui.weather
+package amulp.com.justweather2.ui.weather
 
-import com.amulp.justweather.MyApp
+import amulp.com.justweather2.MyApp
 import android.location.Location
 import androidx.lifecycle.ViewModel
-import com.amulp.justweather.utils.PrefHelper.get
-import com.amulp.justweather.utils.PrefHelper.set
-import com.amulp.justweather.models.Temperature
-import com.amulp.justweather.models.WeatherResponse
-import com.amulp.justweather.rest.RetrofitClient
-import com.amulp.justweather.rest.WeatherService
-import com.amulp.justweather.utils.PrefHelper.defaultPrefs
+import amulp.com.justweather2.utils.PrefHelper.get
+import amulp.com.justweather2.utils.PrefHelper.set
+import amulp.com.justweather2.models.Temperature
+import amulp.com.justweather2.models.WeatherResponse
+import amulp.com.justweather2.rest.RetrofitClient
+import amulp.com.justweather2.rest.WeatherService
+import amulp.com.justweather2.utils.PrefHelper.defaultPrefs
 import android.content.SharedPreferences
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable

@@ -1,9 +1,9 @@
-package com.amulp.justweather
+package amulp.com.justweather2
 
-import com.amulp.justweather.ui.settings.SettingsFragment
+import amulp.com.justweather2.ui.settings.SettingsFragment
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.amulp.justweather.ui.weather.WeatherFragment
+import amulp.com.justweather2.ui.weather.WeatherFragment
 import android.content.Context
 import android.location.LocationManager
 import android.content.Intent

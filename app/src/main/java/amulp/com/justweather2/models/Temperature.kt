@@ -1,4 +1,4 @@
-package com.amulp.justweather.models
+package amulp.com.justweather2.models
 
 /**
  * Created by Amul on 1/24/18.
