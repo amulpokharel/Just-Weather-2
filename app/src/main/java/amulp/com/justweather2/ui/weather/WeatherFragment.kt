@@ -21,7 +21,6 @@ import androidx.core.content.PermissionChecker
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import java.lang.NullPointerException
 
 class WeatherFragment : Fragment() {
 

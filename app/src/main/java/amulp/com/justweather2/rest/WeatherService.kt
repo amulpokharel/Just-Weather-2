@@ -1,10 +1,9 @@
 package amulp.com.justweather2.rest
 
-import retrofit2.http.GET
-import retrofit2.http.Query
-
 import amulp.com.justweather2.models.WeatherResponse
 import io.reactivex.Single
+import retrofit2.http.GET
+import retrofit2.http.Query
 
 /**
  * Created by Amul on 1/22/18.

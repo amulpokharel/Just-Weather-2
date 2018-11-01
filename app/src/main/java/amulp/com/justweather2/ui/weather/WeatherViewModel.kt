@@ -2,20 +2,18 @@ package amulp.com.justweather2.ui.weather
 
 import amulp.com.justweather2.MyApp
 import amulp.com.justweather2.R
-import android.location.Location
-import androidx.lifecycle.ViewModel
-import amulp.com.justweather2.utils.PrefHelper.get
-import amulp.com.justweather2.utils.PrefHelper.set
 import amulp.com.justweather2.models.Temperature
 import amulp.com.justweather2.models.WeatherResponse
 import amulp.com.justweather2.rest.RetrofitClient
 import amulp.com.justweather2.rest.WeatherService
 import amulp.com.justweather2.utils.PrefHelper.defaultPrefs
+import amulp.com.justweather2.utils.PrefHelper.get
+import amulp.com.justweather2.utils.PrefHelper.set
 import android.content.SharedPreferences
-import androidx.databinding.BaseObservable
+import android.location.Location
 import androidx.databinding.ObservableField
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -33,7 +31,7 @@ class WeatherViewModel : ViewModel(){
     var weatherIcon:ObservableField<String> = ObservableField("I")
     var weatherText:ObservableField<String> = ObservableField("text")
     var locationLiveData:MutableLiveData<String> = MutableLiveData()
-    var locationName = "Location"
+    private var locationName = "Location"
         set(value) {
             field = value
             locationLiveData.postValue(value)
