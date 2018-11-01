@@ -4,6 +4,7 @@ import amulp.com.justweather2.ui.settings.SettingsFragment
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import amulp.com.justweather2.ui.weather.WeatherFragment
+import amulp.com.justweather2.ui.weather.WeatherViewModel
 import android.content.Context
 import android.location.LocationManager
 import android.content.Intent
@@ -12,12 +13,24 @@ import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.main_activity.*
 import org.jetbrains.anko.*
 
 
 class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
+    private lateinit var viewModel: WeatherViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        viewModel = ViewModelProviders.of(this).get(WeatherViewModel::class.java)
+
+        val titleObserver = Observer<String> { newName ->
+            this@MainActivity.title = newName
+        }
+
+        viewModel.locationLiveData.observe(this, titleObserver)
+
         if(defaultSharedPreferences.getBoolean(getString(R.string.pref_dark_mode), false)) {
             MyApp.darkMode = true
             setTheme(R.style.AppThemeDark)
@@ -29,7 +42,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
-
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
@@ -67,7 +79,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         attachSharedPrefListener()
 
         val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        val gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        val gpsEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
 
         if(!gpsEnabled) {
             alert("Please enable location services for the app to function properly.", "Location seems to be disabled.") {

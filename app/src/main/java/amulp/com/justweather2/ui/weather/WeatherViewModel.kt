@@ -11,6 +11,8 @@ import amulp.com.justweather2.rest.RetrofitClient
 import amulp.com.justweather2.rest.WeatherService
 import amulp.com.justweather2.utils.PrefHelper.defaultPrefs
 import android.content.SharedPreferences
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -19,18 +21,24 @@ import java.util.*
 
 
 class WeatherViewModel : ViewModel() {
-    private var service: WeatherService
+    private val service: WeatherService
     private var weatherResponse: WeatherResponse? = null
     private val UPDATE_INTERVAL = 600000
-    private var disposable = CompositeDisposable()
+    private val disposable = CompositeDisposable()
 
     //UI Variables
     var weatherIcon = "\uF07B"
     var weatherText = "0 °C"
-    var locationName = "Acquiring Location.."
+    var locationLiveData:MutableLiveData<String> = MutableLiveData()
+    var locationName = "Location"
+        set(value) {
+            field = value
+            locationLiveData.postValue(value)
+        }
     var humidity = "Humidity"
     var pressure = "Pressure"
     var lastUpdate = "Updated: "
+
 
     private var lastChecked: Long?
     private var currentUnit:String?
@@ -119,6 +127,7 @@ class WeatherViewModel : ViewModel() {
         prefs["location"] = locationName
         prefs["weather icon"] = weatherIcon
         prefs["current temp"] = currentTemp!!.inCelsius()
+
     }
 
     fun canUpdate() : Boolean = System.currentTimeMillis() >= (lastChecked!! + UPDATE_INTERVAL)

@@ -2,6 +2,7 @@ package amulp.com.justweather2.ui.weather
 
 import amulp.com.justweather2.MyApp
 import amulp.com.justweather2.R
+import amulp.com.justweather2.databinding.WeatherFragmentBinding
 import amulp.com.justweather2.utils.toast
 import android.Manifest
 import android.annotation.SuppressLint
@@ -18,6 +19,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.core.content.PermissionChecker
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.weather_fragment.*
@@ -39,22 +41,20 @@ class WeatherFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
+        viewModel = ViewModelProviders.of(this).get(WeatherViewModel::class.java)
+        val binding:WeatherFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.weather_fragment, container, false)
+        binding.setLifecycleOwner(this)
+        binding.weatherData = viewModel
 
         locationManager = activity!!.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         setHasOptionsMenu(true)
 
-        return inflater.inflate(R.layout.weather_fragment, container, false)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(WeatherViewModel::class.java)
+        return binding.root
     }
 
     override fun onResume() {
         super.onResume()
         viewModel.updateUnit()
-        updateUIElements()
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -103,50 +103,24 @@ class WeatherFragment : Fragment() {
     private fun getLastLocation() {
         try {
             if(viewModel.canUpdate()) {
-                val loc: Location? = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+                val loc: Location? = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
                         ?: throw NullPointerException()
                 viewModel.getWeather(loc!!)
-                updateUI()
             }
-            else{
-                viewModel.dataChanged = true
-                updateUI()
-            }
-
         }
         catch (e:Exception)
         {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0L, 0f, locationListener)
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0L, 0f, locationListener)
         }
     }
 
-    private fun updateUI()
-    {
-        doAsync {
-            while(!viewModel.dataChanged){
-                sleep(1000)
-            }
-            uiThread {
-                viewModel.dataChanged = false
-                updateUIElements()
-            }
-
-        }
-    }
-
-    private fun updateUIElements(){
-        weather_icon.text = viewModel.weatherIcon
-        weather_text.text = viewModel.weatherText
-        activity!!.title = viewModel.locationName
-        MyApp.currentLocation = viewModel.locationName
-        humidity.text = viewModel.humidity
-        pressure.text = viewModel.pressure
-        last_update.text = viewModel.lastUpdate
-
-        val resourceID = activity!!.applicationContext.resources.getIdentifier(viewModel.weatherIcon, "string", activity!!.packageName)
+    private fun resolveResource(str:String) : String{
+        val resourceID = activity!!.applicationContext.resources.getIdentifier(str, "string", activity!!.packageName)
 
         if (resourceID != 0)
-            weather_icon.text = getString(resourceID)
+            return getString(resourceID)
+        else
+            return getString(R.string.w01d)
     }
 
     override fun onRequestPermissionsResult(
@@ -175,7 +149,6 @@ class WeatherFragment : Fragment() {
         @SuppressLint("MissingPermission")
         override fun onLocationChanged(location: Location) {
             viewModel.getWeather(location)
-            updateUI()
             locationManager.removeUpdates(this)
         }
         override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}

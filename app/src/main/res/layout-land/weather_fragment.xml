@@ -4,6 +4,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="weatherData"
+            type="amulp.com.justweather2.ui.weather.WeatherViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/weather"
         android:layout_width="match_parent"
@@ -24,6 +30,7 @@
             android:textAlignment="center"
             android:textSize="90sp"
             android:textStyle="bold"
+            android:text="@{weatherData.weatherIcon}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -43,7 +50,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:gravity="center"
-            android:text="@string/default_temp"
+            android:text="@{weatherData.weatherText}"
             android:textAlignment="center"
             android:textSize="36sp"
             android:textStyle="bold"
@@ -60,7 +67,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:gravity="center"
-            android:text="@string/default_humidity"
+            android:text="@{weatherData.humidity}"
             android:textAlignment="center"
             android:textSize="14sp"
             android:textStyle="bold"
@@ -78,7 +85,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:gravity="center"
-            android:text="@string/default_pressure"
+            android:text="@{weatherData.pressure}"
             android:textAlignment="center"
             android:textSize="14sp"
             android:textStyle="bold"
@@ -97,7 +104,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:gravity="center"
-            android:text="@string/last_update"
+            android:text="@{weatherData.lastUpdate}"
             android:textAlignment="center"
             android:textSize="12sp"
             android:textStyle="bold"
