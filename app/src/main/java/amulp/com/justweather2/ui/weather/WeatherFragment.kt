@@ -1,6 +1,5 @@
 package amulp.com.justweather2.ui.weather
 
-import amulp.com.justweather2.MyApp
 import amulp.com.justweather2.R
 import amulp.com.justweather2.databinding.WeatherFragmentBinding
 import amulp.com.justweather2.utils.toast
@@ -22,12 +21,7 @@ import androidx.core.content.PermissionChecker
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import kotlinx.android.synthetic.main.weather_fragment.*
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.uiThread
 import java.lang.NullPointerException
-import java.lang.Thread.sleep
-
 
 class WeatherFragment : Fragment() {
 
@@ -108,19 +102,18 @@ class WeatherFragment : Fragment() {
                 viewModel.getWeather(loc!!)
             }
         }
-        catch (e:Exception)
-        {
+        catch (e:Exception) {
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0L, 0f, locationListener)
         }
     }
 
-    private fun resolveResource(str:String) : String{
-        val resourceID = activity!!.applicationContext.resources.getIdentifier(str, "string", activity!!.packageName)
-
-        if (resourceID != 0)
-            return getString(resourceID)
-        else
-            return getString(R.string.w01d)
+    private fun hasAllPermissionsGranted(grantResults: IntArray): Boolean {
+        for (grantResult in grantResults) {
+            if (grantResult == PackageManager.PERMISSION_DENIED) {
+                return false
+            }
+        }
+        return true
     }
 
     override fun onRequestPermissionsResult(
@@ -128,20 +121,17 @@ class WeatherFragment : Fragment() {
             permissions: Array<String>,
             grantResults: IntArray
     ) {
-        if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE) {
-            when {
-                grantResults.isEmpty() -> Log.i("d", "User interaction was cancelled.")
-
-                (grantResults[0] == PackageManager.PERMISSION_GRANTED) -> getLastLocation()
-
-                else -> {
-                    "Location Denied".toast()
-                    val location = Location("")
-                    location.latitude = 0.0
-                    location.longitude = 0.0
-                    viewModel.getWeather(location)
-                }
+        if(hasAllPermissionsGranted(grantResults)){
+            getLastLocation()
+        }
+        else{
+            Log.i("d", "User interaction was cancelled.")
+            "Location Denied".toast()
+            val location = Location("").apply {
+                latitude = 0.0
+                longitude = 0.0
             }
+            viewModel.getWeather(location)
         }
     }
 

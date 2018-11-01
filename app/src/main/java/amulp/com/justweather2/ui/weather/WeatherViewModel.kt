@@ -1,6 +1,7 @@
 package amulp.com.justweather2.ui.weather
 
 import amulp.com.justweather2.MyApp
+import amulp.com.justweather2.R
 import android.location.Location
 import androidx.lifecycle.ViewModel
 import amulp.com.justweather2.utils.PrefHelper.get
@@ -11,6 +12,8 @@ import amulp.com.justweather2.rest.RetrofitClient
 import amulp.com.justweather2.rest.WeatherService
 import amulp.com.justweather2.utils.PrefHelper.defaultPrefs
 import android.content.SharedPreferences
+import androidx.databinding.BaseObservable
+import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -20,24 +23,24 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class WeatherViewModel : ViewModel() {
+class WeatherViewModel : ViewModel(){
     private val service: WeatherService
     private var weatherResponse: WeatherResponse? = null
     private val UPDATE_INTERVAL = 600000
     private val disposable = CompositeDisposable()
 
     //UI Variables
-    var weatherIcon = "\uF07B"
-    var weatherText = "0 °C"
+    var weatherIcon:ObservableField<String> = ObservableField("I")
+    var weatherText:ObservableField<String> = ObservableField("text")
     var locationLiveData:MutableLiveData<String> = MutableLiveData()
     var locationName = "Location"
         set(value) {
             field = value
             locationLiveData.postValue(value)
         }
-    var humidity = "Humidity"
-    var pressure = "Pressure"
-    var lastUpdate = "Updated: "
+    var humidity:ObservableField<String> = ObservableField("0")
+    var pressure:ObservableField<String> = ObservableField("0")
+    var lastUpdate:ObservableField<String> = ObservableField("wat")
 
 
     private var lastChecked: Long?
@@ -45,22 +48,18 @@ class WeatherViewModel : ViewModel() {
 
     private var loc: Location? = null
     private var currentTemp: Temperature? = null
-
-
-    var dataChanged = false
-
     private val prefs:SharedPreferences = defaultPrefs(MyApp.getAppContext())
 
     init {
         lastChecked = prefs["last checked", 0]
         currentUnit = prefs["current unit", "c"]
 
-        weatherText = prefs["weather text", "0 °C"]!!
-        humidity = prefs["humidity", "Humidity"]!!
-        pressure = prefs["pressure", "Pressure"]!!
-        lastUpdate = prefs["last update", "Updated: "]!!
+        weatherText.set(prefs["weather text", "0 °C"]!!)
+        humidity.set(prefs["humidity", "Humidity"]!!)
+        pressure.set(prefs["pressure", "Pressure"]!!)
+        lastUpdate.set(prefs["last update", "Updated: "]!!)
         locationName = prefs["location", "Acquiring Location.."]!!
-        weatherIcon = prefs["weather icon", "\uF07B"]!!
+        weatherIcon.set(prefs["weather icon", "\uF07B"]!!)
 
         currentTemp = Temperature(prefs["current temp", 0]!!)
 
@@ -80,21 +79,17 @@ class WeatherViewModel : ViewModel() {
                         processWeather(result)
                     })
         }
-        else
-            dataChanged = true
     }
 
     fun updateUnit(){
-        if(prefs["current unit","c"] != currentUnit)
-        {
+        if(prefs["current unit","c"] != currentUnit) {
             currentUnit  = prefs["current unit","c"]
             when(currentUnit){
-                "c" -> weatherText = currentTemp!!.inCelsius().toString() + " °C"
-                "f" -> weatherText = currentTemp!!.inFahrenheit().toString() + " °F"
-                "k" -> weatherText = currentTemp!!.inKelvin().toString() + " °K"
+                "c" -> weatherText.set(currentTemp!!.inCelsius().toString() + " °C")
+                "f" -> weatherText.set(currentTemp!!.inFahrenheit().toString() + " °F")
+                "k" -> weatherText.set(currentTemp!!.inKelvin().toString() + " °K")
             }
-
-            prefs["weather text"] = weatherText
+            prefs["weather text"] = weatherText.get()
         }
     }
 
@@ -103,31 +98,38 @@ class WeatherViewModel : ViewModel() {
         disposable.dispose()
     }
 
+    private fun resolveResource(str:String) : String{
+        val resourceID = MyApp.getAppContext().resources.getIdentifier(str, "string", MyApp.getAppContext().packageName)
+
+        if (resourceID != 0)
+            return MyApp.getAppContext().getString(resourceID)
+        else
+            return MyApp.getAppContext().getString(R.string.w01d)
+    }
+
     private fun processWeather(response: WeatherResponse){
         currentTemp = Temperature(response.main.temp)
 
         when(currentUnit){
-            "c" -> weatherText = currentTemp!!.inCelsius().toString() + " °C"
-            "f" -> weatherText = currentTemp!!.inFahrenheit().toString() + " °F"
-            "k" -> weatherText = currentTemp!!.inKelvin().toString() + " °K"
+            "c" -> weatherText.set(currentTemp!!.inCelsius().toString() + " °C")
+            "f" -> weatherText.set(currentTemp!!.inFahrenheit().toString() + " °F")
+            "k" -> weatherText.set(currentTemp!!.inKelvin().toString() + " °K")
         }
 
-        humidity = "Humidity: " + response.main.humidity + " %"
-        pressure = "Pressure: " + response.main.pressure + " hpa"
-        lastUpdate = "Updated: " + SimpleDateFormat.getDateTimeInstance().format(Date(lastChecked!!))
+        humidity.set("Humidity: " + response.main.humidity + " %")
+        pressure.set("Pressure: " + response.main.pressure + " hpa")
+        lastUpdate.set("Updated: " + SimpleDateFormat.getDateTimeInstance().format(Date(lastChecked!!)))
         locationName = response.name
-        weatherIcon = "w" + response.weather!![0].icon
-        dataChanged = true
-
+        locationLiveData.postValue(response.name)
+        weatherIcon.set(resolveResource("w" + response.weather!![0].icon))
         prefs["current unit"] = currentUnit
-        prefs["weather text"] = weatherText
-        prefs["humidity"] = humidity
-        prefs["pressure"] = pressure
-        prefs["last update"] = lastUpdate
+        prefs["weather text"] = weatherText.get()
+        prefs["humidity"] = humidity.get()
+        prefs["pressure"] = pressure.get()
+        prefs["last update"] = lastUpdate.get()
         prefs["location"] = locationName
-        prefs["weather icon"] = weatherIcon
+        prefs["weather icon"] = weatherIcon.get()
         prefs["current temp"] = currentTemp!!.inCelsius()
-
     }
 
     fun canUpdate() : Boolean = System.currentTimeMillis() >= (lastChecked!! + UPDATE_INTERVAL)

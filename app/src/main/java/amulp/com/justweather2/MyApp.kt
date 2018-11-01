@@ -10,7 +10,6 @@ class MyApp : Application() {
     companion object {
         private var instance: MyApp? = null
         var darkMode = false
-        var currentLocation:String = ""
 
         @JvmStatic
         fun getAppContext() : Context =  instance!!.applicationContext

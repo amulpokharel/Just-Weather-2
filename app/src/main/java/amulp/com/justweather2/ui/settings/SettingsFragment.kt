@@ -8,6 +8,7 @@ import android.view.MenuItem
 import androidx.preference.PreferenceFragmentCompat
 
 class SettingsFragment: PreferenceFragmentCompat(){
+    private var tempTitle = ""
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey)
     }

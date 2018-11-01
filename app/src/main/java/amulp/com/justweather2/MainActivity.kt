@@ -64,11 +64,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         supportFragmentManager.addOnBackStackChangedListener {
             if(supportFragmentManager.findFragmentByTag("current") is SettingsFragment){
                 actionBar?.setHomeAsUpIndicator(R.drawable.ic_back)
-                actionBar?.setTitle("Settings")
             }
             else { // todo change if more fragments are added
                 actionBar?.setHomeAsUpIndicator(R.drawable.ic_location)
-                actionBar?.title = MyApp.currentLocation
             }
         }
     }
@@ -104,6 +102,13 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         detachSharedPrefListener()
     }
 
+    private fun titleListen(){
+        val titleObserver = Observer<String> { newName ->
+            this@MainActivity.title = newName
+        }
+        viewModel.locationLiveData.observe(this, titleObserver)
+    }
+
     private fun attachSharedPrefListener() = defaultSharedPreferences.registerOnSharedPreferenceChangeListener(this)
     private fun detachSharedPrefListener() = defaultSharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
 
@@ -114,7 +119,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 recreate()
             }
             "current unit" -> {
-
+                viewModel.updateUnit()
             }
         }
     }
@@ -136,6 +141,11 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onBackPressed() {
+        titleListen()
+        super.onBackPressed()
     }
 
     private fun enableLocationSettings() {
