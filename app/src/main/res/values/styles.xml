@@ -4,7 +4,7 @@
     <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimary">@color/primaryDarkColor</item>
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
         <item name="android:colorBackground">@color/primaryDarkColor</item>
         <item name="android:windowAnimationStyle">@style/WindowAnimationTransition</item>
@@ -16,7 +16,7 @@
     <style name="AppThemeDark" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorPrimary">@color/secondaryColor</item>
+        <item name="colorPrimary">@color/secondaryDarkColor</item>
         <item name="colorPrimaryDark">@color/secondaryDarkColor</item>
         <item name="android:colorBackground">@color/secondaryDarkColor</item>
         <item name="android:windowAnimationStyle">@style/WindowAnimationTransition</item>
