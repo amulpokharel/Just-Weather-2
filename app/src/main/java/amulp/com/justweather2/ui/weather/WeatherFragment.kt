@@ -12,15 +12,13 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.core.content.PermissionChecker
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import kotlinx.android.synthetic.main.weather_fragment.*
 
 class WeatherFragment : Fragment() {
 
@@ -32,6 +30,11 @@ class WeatherFragment : Fragment() {
     private lateinit var locationManager: LocationManager
     private val REQUEST_PERMISSIONS_REQUEST_CODE = 34
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        setHasOptionsMenu(true)
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         viewModel = ViewModelProviders.of(this).get(WeatherViewModel::class.java)
@@ -40,7 +43,6 @@ class WeatherFragment : Fragment() {
         binding.weatherData = viewModel
 
         locationManager = activity!!.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        setHasOptionsMenu(true)
 
         return binding.root
     }
@@ -48,6 +50,10 @@ class WeatherFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         viewModel.updateUnit()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater!!.inflate(R.menu.menu, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {

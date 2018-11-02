@@ -16,6 +16,7 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.main_activity.*
+import kotlinx.android.synthetic.main.weather_fragment.*
 import org.jetbrains.anko.*
 
 
@@ -25,12 +26,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     override fun onCreate(savedInstanceState: Bundle?) {
         viewModel = ViewModelProviders.of(this).get(WeatherViewModel::class.java)
 
-        val titleObserver = Observer<String> { newName ->
-            this@MainActivity.title = newName
-        }
-
-        viewModel.locationLiveData.observe(this, titleObserver)
-
         if(defaultSharedPreferences.getBoolean(getString(R.string.pref_dark_mode), false)) {
             MyApp.darkMode = true
             setTheme(R.style.AppThemeDark)
@@ -39,6 +34,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             MyApp.darkMode = false
             setTheme(R.style.AppTheme)
         }
+
+        title = ""
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
@@ -55,17 +52,21 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         actionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
-            if(supportFragmentManager.findFragmentByTag("current") is SettingsFragment)
+            if(supportFragmentManager.findFragmentByTag("current") is SettingsFragment){
                 setHomeAsUpIndicator(R.drawable.ic_back)
-            else
+            }
+            else {
                 setHomeAsUpIndicator(R.drawable.ic_location)
+            }
         }
 
         supportFragmentManager.addOnBackStackChangedListener {
             if(supportFragmentManager.findFragmentByTag("current") is SettingsFragment){
+                invalidateOptionsMenu()
                 actionBar?.setHomeAsUpIndicator(R.drawable.ic_back)
             }
             else { // todo change if more fragments are added
+                invalidateOptionsMenu()
                 actionBar?.setHomeAsUpIndicator(R.drawable.ic_location)
             }
         }
@@ -102,13 +103,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         detachSharedPrefListener()
     }
 
-    private fun titleListen(){
-        val titleObserver = Observer<String> { newName ->
-            this@MainActivity.title = newName
-        }
-        viewModel.locationLiveData.observe(this, titleObserver)
-    }
-
     private fun attachSharedPrefListener() = defaultSharedPreferences.registerOnSharedPreferenceChangeListener(this)
     private fun detachSharedPrefListener() = defaultSharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
 
@@ -124,10 +118,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
@@ -141,11 +131,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    override fun onBackPressed() {
-        titleListen()
-        super.onBackPressed()
     }
 
     private fun enableLocationSettings() {

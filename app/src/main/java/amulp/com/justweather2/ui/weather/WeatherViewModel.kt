@@ -30,12 +30,7 @@ class WeatherViewModel : ViewModel(){
     //UI Variables
     var weatherIcon:ObservableField<String> = ObservableField("I")
     var weatherText:ObservableField<String> = ObservableField("text")
-    var locationLiveData:MutableLiveData<String> = MutableLiveData()
-    private var locationName = "Location"
-        set(value) {
-            field = value
-            locationLiveData.postValue(value)
-        }
+    var locationName:ObservableField<String> = ObservableField("Location")
     var humidity:ObservableField<String> = ObservableField("0")
     var pressure:ObservableField<String> = ObservableField("0")
     var lastUpdate:ObservableField<String> = ObservableField("wat")
@@ -56,7 +51,7 @@ class WeatherViewModel : ViewModel(){
         humidity.set(prefs["humidity", "Humidity"]!!)
         pressure.set(prefs["pressure", "Pressure"]!!)
         lastUpdate.set(prefs["last update", "Updated: "]!!)
-        locationName = prefs["location", "Acquiring Location.."]!!
+        locationName.set(prefs["location", "Acquiring Location.."]!!)
         weatherIcon.set(prefs["weather icon", "\uF07B"]!!)
 
         currentTemp = Temperature(prefs["current temp", 0]!!)
@@ -117,15 +112,14 @@ class WeatherViewModel : ViewModel(){
         humidity.set("Humidity: " + response.main.humidity + " %")
         pressure.set("Pressure: " + response.main.pressure + " hpa")
         lastUpdate.set("Updated: " + SimpleDateFormat.getDateTimeInstance().format(Date(lastChecked!!)))
-        locationName = response.name
-        locationLiveData.postValue(response.name)
+        locationName.set(response.name)
         weatherIcon.set(resolveResource("w" + response.weather!![0].icon))
         prefs["current unit"] = currentUnit
         prefs["weather text"] = weatherText.get()
         prefs["humidity"] = humidity.get()
         prefs["pressure"] = pressure.get()
         prefs["last update"] = lastUpdate.get()
-        prefs["location"] = locationName
+        prefs["location"] = locationName.get()
         prefs["weather icon"] = weatherIcon.get()
         prefs["current temp"] = currentTemp!!.inCelsius()
     }

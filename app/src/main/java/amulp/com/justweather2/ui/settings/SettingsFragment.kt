@@ -8,14 +8,12 @@ import android.view.MenuItem
 import androidx.preference.PreferenceFragmentCompat
 
 class SettingsFragment: PreferenceFragmentCompat(){
-    private var tempTitle = ""
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
-        activity!!.title = "Settings"
         super.onCreate(savedInstanceState)
     }
 
