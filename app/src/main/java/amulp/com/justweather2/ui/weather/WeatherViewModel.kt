@@ -3,6 +3,7 @@ package amulp.com.justweather2.ui.weather
 import amulp.com.justweather2.MyApp
 import amulp.com.justweather2.R
 import amulp.com.justweather2.models.CurrentWeather
+import amulp.com.justweather2.models.FutureWeatherElement
 import amulp.com.justweather2.models.WeatherList
 import amulp.com.justweather2.models.subclasses.Temperature
 import amulp.com.justweather2.rest.RetrofitClient
@@ -26,7 +27,7 @@ class WeatherViewModel : ViewModel(){
     private var currentWeather: CurrentWeather? = null
     private var weatherList: WeatherList? = null
     private val UPDATE_INTERVAL = 600000
-    private val FUTURE_UPDATE_INTERVAL = 600000
+    private val FUTURE_UPDATE_INTERVAL = 0
 
     private val disposable = CompositeDisposable()
 
@@ -37,6 +38,8 @@ class WeatherViewModel : ViewModel(){
     var humidity:ObservableField<String> = ObservableField("0")
     var pressure:ObservableField<String> = ObservableField("0")
     var lastUpdate:ObservableField<String> = ObservableField("wat")
+
+    var forecastList:MutableList<FutureWeatherElement> = mutableListOf()
 
     private var lastChecked: Long?
     private var lastFutureChecked: Long?
@@ -102,6 +105,8 @@ class WeatherViewModel : ViewModel(){
                 "k" -> weatherText.set(currentTemp!!.inKelvin().toString() + " °K")
             }
             prefs["weather text"] = weatherText.get()
+
+            //TODO update the hourly weather too
         }
     }
 
@@ -144,7 +149,21 @@ class WeatherViewModel : ViewModel(){
     }
 
     private fun processFutureWeather(weatherList: WeatherList){
-        print(weatherList)
+        var temp = 0
+        for (i in 0..5) {
+            temp = weatherList.list[i].main.temp.toInt()
+
+            temp = when(currentUnit){
+                "c" -> temp
+                "f" -> (temp * (9.0 / 5.0) + 32.0).toInt()
+                "k" -> (temp + 273.15).toInt()
+                else -> temp
+            }
+
+            forecastList.add(FutureWeatherElement().apply {
+                setValues(temp , weatherList.list[i].weather[0].icon)
+            })
+        }
     }
 
     fun canUpdate() : Boolean = System.currentTimeMillis() >= (lastChecked!! + UPDATE_INTERVAL)

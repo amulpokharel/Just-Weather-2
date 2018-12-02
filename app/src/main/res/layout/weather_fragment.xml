@@ -48,8 +48,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/weather_icon">
-
-
+            
             <TableRow>
                 <TextView
                     android:id="@+id/weather_text"
