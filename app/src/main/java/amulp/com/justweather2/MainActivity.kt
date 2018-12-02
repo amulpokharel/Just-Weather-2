@@ -9,14 +9,11 @@ import android.content.SharedPreferences
 import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
-import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.main_activity.*
-import kotlinx.android.synthetic.main.weather_fragment.*
 import org.jetbrains.anko.*
 
 

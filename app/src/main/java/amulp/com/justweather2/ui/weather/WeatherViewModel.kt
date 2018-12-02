@@ -26,7 +26,7 @@ class WeatherViewModel : ViewModel(){
     private var currentWeather: CurrentWeather? = null
     private var weatherList: WeatherList? = null
     private val UPDATE_INTERVAL = 600000
-    private val FUTURE_UPDATE_INTERVAL = 0
+    private val FUTURE_UPDATE_INTERVAL = 600000
 
     private val disposable = CompositeDisposable()
 
@@ -37,7 +37,6 @@ class WeatherViewModel : ViewModel(){
     var humidity:ObservableField<String> = ObservableField("0")
     var pressure:ObservableField<String> = ObservableField("0")
     var lastUpdate:ObservableField<String> = ObservableField("wat")
-
 
     private var lastChecked: Long?
     private var lastFutureChecked: Long?
@@ -114,10 +113,10 @@ class WeatherViewModel : ViewModel(){
     private fun resolveResource(str:String) : String{
         val resourceID = MyApp.getAppContext().resources.getIdentifier(str, "string", MyApp.getAppContext().packageName)
 
-        if (resourceID != 0)
-            return MyApp.getAppContext().getString(resourceID)
+        return if (resourceID != 0)
+            MyApp.getAppContext().getString(resourceID)
         else
-            return MyApp.getAppContext().getString(R.string.w01d)
+            MyApp.getAppContext().getString(R.string.w01d)
     }
 
     private fun processWeather(currentWeather: CurrentWeather){
@@ -133,7 +132,7 @@ class WeatherViewModel : ViewModel(){
         pressure.set("Pressure: " + currentWeather.main.pressure + " hpa")
         lastUpdate.set("Updated: " + SimpleDateFormat.getDateTimeInstance().format(Date(lastChecked!!)))
         locationName.set(currentWeather.name)
-        weatherIcon.set(resolveResource("w" + currentWeather.weather!![0].icon))
+        weatherIcon.set(resolveResource("w" + currentWeather.weather[0].icon))
         prefs["current unit"] = currentUnit
         prefs["weather text"] = weatherText.get()
         prefs["humidity"] = humidity.get()
