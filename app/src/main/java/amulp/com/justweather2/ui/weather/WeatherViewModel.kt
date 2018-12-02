@@ -39,7 +39,7 @@ class WeatherViewModel : ViewModel(){
     var pressure:ObservableField<String> = ObservableField("0")
     var lastUpdate:ObservableField<String> = ObservableField("wat")
 
-    var forecastList:MutableList<FutureWeatherElement> = mutableListOf()
+    var forecastList:List<FutureWeatherElement> = listOf(FutureWeatherElement(),FutureWeatherElement(),FutureWeatherElement(),FutureWeatherElement(),FutureWeatherElement())
 
     private var lastChecked: Long?
     private var lastFutureChecked: Long?
@@ -150,7 +150,7 @@ class WeatherViewModel : ViewModel(){
 
     private fun processFutureWeather(weatherList: WeatherList){
         var temp = 0
-        for (i in 0..5) {
+        for (i in 0..4) {
             temp = weatherList.list[i].main.temp.toInt()
 
             temp = when(currentUnit){
@@ -160,10 +160,9 @@ class WeatherViewModel : ViewModel(){
                 else -> temp
             }
 
-            forecastList.add(FutureWeatherElement().apply {
-                setValues(temp , weatherList.list[i].weather[0].icon)
-            })
+            forecastList[i].setValues(temp , weatherList.list[i].weather[0].icon)
         }
+        print("temp")
     }
 
     fun canUpdate() : Boolean = System.currentTimeMillis() >= (lastChecked!! + UPDATE_INTERVAL)

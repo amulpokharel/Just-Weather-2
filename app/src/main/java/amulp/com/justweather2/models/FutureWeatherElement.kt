@@ -4,10 +4,10 @@ import amulp.com.justweather2.MyApp
 import amulp.com.justweather2.R
 import androidx.databinding.ObservableField
 
-data class FutureWeatherElement(var temp: ObservableField<Double> = ObservableField(0.0), var icon:ObservableField<String> = ObservableField("")){
+data class FutureWeatherElement(var temp: ObservableField<Int> = ObservableField(0), var icon:ObservableField<String> = ObservableField("")){
     fun setValues(temp: Int, icon:String){
         this.temp.set(temp)
-        this.icon.set(resolveResource(icon))
+        this.icon.set(resolveResource("w$icon"))
     }
 
     private fun resolveResource(str:String) : String{

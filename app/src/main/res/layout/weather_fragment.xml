@@ -27,20 +27,20 @@
             android:layout_marginBottom="8dp"
             android:fontFamily="@font/weatherfont"
             android:gravity="center"
+            android:text="@{weatherData.weatherIcon}"
             android:textAlignment="center"
             android:textSize="120sp"
             android:textStyle="bold"
-            android:text="@{weatherData.weatherIcon}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.262"
-            app:srcCompat="?android:attr/textCheckMark"
-            />
+            app:srcCompat="?android:attr/textCheckMark" />
 
 
         <TableLayout
+            android:id="@+id/tableLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -48,8 +48,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/weather_icon">
-            
+
             <TableRow>
+
                 <TextView
                     android:id="@+id/weather_text"
                     android:layout_width="wrap_content"
@@ -116,6 +117,7 @@
 
 
             <TableRow>
+
                 <TextView
                     android:id="@+id/location"
                     android:layout_width="wrap_content"
@@ -132,6 +134,96 @@
             </TableRow>
         </TableLayout>
 
+        <TextView
+            android:id="@+id/hour3"
+            android:layout_width="72dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="32dp"
+            android:fontFamily="@font/weatherfont"
+            android:gravity="center"
+            android:text="@{weatherData.forecastList[0].icon}"
+            android:textAlignment="center"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/hour6"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tableLayout"
+            app:srcCompat="?android:attr/textCheckMark" />
+
+        <TextView
+            android:id="@+id/hour6"
+            android:layout_width="73dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="32dp"
+            android:fontFamily="@font/weatherfont"
+            android:gravity="center"
+            android:text="@{weatherData.forecastList[1].icon}"
+            android:textAlignment="center"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/hour9"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/hour3"
+            app:layout_constraintTop_toBottomOf="@+id/tableLayout"
+            app:srcCompat="?android:attr/textCheckMark" />
+
+        <TextView
+            android:id="@+id/hour9"
+            android:layout_width="72dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="32dp"
+            android:fontFamily="@font/weatherfont"
+            android:gravity="center"
+            android:text="@{weatherData.forecastList[2].icon}"
+            android:textAlignment="center"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/hour12"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/hour6"
+            app:layout_constraintTop_toBottomOf="@+id/tableLayout"
+            app:srcCompat="?android:attr/textCheckMark" />
+
+        <TextView
+            android:id="@+id/hour12"
+            android:layout_width="73dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="32dp"
+            android:fontFamily="@font/weatherfont"
+            android:gravity="center"
+            android:text="@{weatherData.forecastList[3].icon}"
+            android:textAlignment="center"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/hour15"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/hour9"
+            app:layout_constraintTop_toBottomOf="@+id/tableLayout"
+            app:srcCompat="?android:attr/textCheckMark" />
+
+        <TextView
+            android:id="@+id/hour15"
+            android:layout_width="73dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="8dp"
+            android:fontFamily="@font/weatherfont"
+            android:gravity="center"
+            android:text="@{weatherData.forecastList[4].icon}"
+            android:textAlignment="center"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/hour12"
+            app:layout_constraintTop_toBottomOf="@+id/tableLayout"
+            app:srcCompat="?android:attr/textCheckMark" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
