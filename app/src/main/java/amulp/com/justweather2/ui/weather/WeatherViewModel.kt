@@ -100,13 +100,25 @@ class WeatherViewModel : ViewModel(){
         if(prefs["current unit","c"] != currentUnit) {
             currentUnit  = prefs["current unit","c"]
             when(currentUnit){
-                "c" -> weatherText.set(currentTemp!!.inCelsius().toString() + " °C")
-                "f" -> weatherText.set(currentTemp!!.inFahrenheit().toString() + " °F")
-                "k" -> weatherText.set(currentTemp!!.inKelvin().toString() + " °K")
+                "c" -> {
+                    weatherText.set(currentTemp!!.inCelsius().toString() + " °C")
+                    for(e in forecastList)
+                        e.changeToC()
+                }
+                "f" -> {
+                    weatherText.set(currentTemp!!.inFahrenheit().toString() + " °F")
+                    for(e in forecastList)
+                        e.changeToF()
+                }
+                "k" -> {
+                    weatherText.set(currentTemp!!.inKelvin().toString() + " °K")
+                    for(e in forecastList)
+                        e.changeToF()
+                }
             }
             prefs["weather text"] = weatherText.get()
 
-            //TODO update the hourly weather too
+
         }
     }
 
@@ -149,18 +161,15 @@ class WeatherViewModel : ViewModel(){
     }
 
     private fun processFutureWeather(weatherList: WeatherList){
-        var temp = 0
         for (i in 0..4) {
-            temp = weatherList.list[i].main.temp.toInt()
-
-            temp = when(currentUnit){
-                "c" -> temp
-                "f" -> (temp * (9.0 / 5.0) + 32.0).toInt()
-                "k" -> (temp + 273.15).toInt()
-                else -> temp
+            forecastList[i].apply {
+                setValues(weatherList.list[i].main.temp.toInt() , weatherList.list[i].weather[0].icon)
+                when(currentUnit){
+                    "f" -> changeToF()
+                    "k" -> changeToK()
+                    else -> changeToC()
+                }
             }
-
-            forecastList[i].setValues(temp , weatherList.list[i].weather[0].icon)
         }
         print("temp")
     }
