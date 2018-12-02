@@ -2,8 +2,9 @@ package amulp.com.justweather2.ui.weather
 
 import amulp.com.justweather2.MyApp
 import amulp.com.justweather2.R
-import amulp.com.justweather2.models.Temperature
-import amulp.com.justweather2.models.WeatherResponse
+import amulp.com.justweather2.models.CurrentWeather
+import amulp.com.justweather2.models.WeatherList
+import amulp.com.justweather2.models.subclasses.Temperature
 import amulp.com.justweather2.rest.RetrofitClient
 import amulp.com.justweather2.rest.WeatherService
 import amulp.com.justweather2.utils.PrefHelper.defaultPrefs
@@ -12,7 +13,6 @@ import amulp.com.justweather2.utils.PrefHelper.set
 import android.content.SharedPreferences
 import android.location.Location
 import androidx.databinding.ObservableField
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -23,8 +23,11 @@ import java.util.*
 
 class WeatherViewModel : ViewModel(){
     private val service: WeatherService
-    private var weatherResponse: WeatherResponse? = null
+    private var currentWeather: CurrentWeather? = null
+    private var weatherList: WeatherList? = null
     private val UPDATE_INTERVAL = 600000
+    private val FUTURE_UPDATE_INTERVAL = 0
+
     private val disposable = CompositeDisposable()
 
     //UI Variables
@@ -37,6 +40,7 @@ class WeatherViewModel : ViewModel(){
 
 
     private var lastChecked: Long?
+    private var lastFutureChecked: Long?
     private var currentUnit:String?
 
     private var loc: Location? = null
@@ -45,6 +49,7 @@ class WeatherViewModel : ViewModel(){
 
     init {
         lastChecked = prefs["last checked", 0]
+        lastFutureChecked = prefs["last future checked", 0]
         currentUnit = prefs["current unit", "c"]
 
         weatherText.set(prefs["weather text", "0 °C"]!!)
@@ -66,10 +71,25 @@ class WeatherViewModel : ViewModel(){
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe { result ->
-                        weatherResponse = result
+                        currentWeather = result
                         lastChecked = System.currentTimeMillis()
                         prefs["last checked"] = lastChecked
                         processWeather(result)
+                    })
+        }
+    }
+
+    fun getFutureWeather(location: Location){
+        loc = location
+        if(canFutureUpdate()) {
+            disposable.add(service.getFutureWeather(location.longitude, location.latitude)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe { result ->
+                        weatherList = result
+                        lastFutureChecked = System.currentTimeMillis()
+                        prefs["last future checked"] = lastFutureChecked
+                        processFutureWeather(result)
                     })
         }
     }
@@ -100,8 +120,8 @@ class WeatherViewModel : ViewModel(){
             return MyApp.getAppContext().getString(R.string.w01d)
     }
 
-    private fun processWeather(response: WeatherResponse){
-        currentTemp = Temperature(response.main.temp)
+    private fun processWeather(currentWeather: CurrentWeather){
+        currentTemp = Temperature(currentWeather.main.temp)
 
         when(currentUnit){
             "c" -> weatherText.set(currentTemp!!.inCelsius().toString() + " °C")
@@ -109,11 +129,11 @@ class WeatherViewModel : ViewModel(){
             "k" -> weatherText.set(currentTemp!!.inKelvin().toString() + " °K")
         }
 
-        humidity.set("Humidity: " + response.main.humidity + " %")
-        pressure.set("Pressure: " + response.main.pressure + " hpa")
+        humidity.set("Humidity: " + currentWeather.main.humidity + " %")
+        pressure.set("Pressure: " + currentWeather.main.pressure + " hpa")
         lastUpdate.set("Updated: " + SimpleDateFormat.getDateTimeInstance().format(Date(lastChecked!!)))
-        locationName.set(response.name)
-        weatherIcon.set(resolveResource("w" + response.weather!![0].icon))
+        locationName.set(currentWeather.name)
+        weatherIcon.set(resolveResource("w" + currentWeather.weather!![0].icon))
         prefs["current unit"] = currentUnit
         prefs["weather text"] = weatherText.get()
         prefs["humidity"] = humidity.get()
@@ -124,5 +144,11 @@ class WeatherViewModel : ViewModel(){
         prefs["current temp"] = currentTemp!!.inCelsius()
     }
 
+    private fun processFutureWeather(weatherList: WeatherList){
+        print(weatherList)
+    }
+
     fun canUpdate() : Boolean = System.currentTimeMillis() >= (lastChecked!! + UPDATE_INTERVAL)
+    fun canFutureUpdate() : Boolean = System.currentTimeMillis() >= (lastFutureChecked!! + FUTURE_UPDATE_INTERVAL)
+
 }

@@ -101,10 +101,14 @@ class WeatherFragment : Fragment() {
     @SuppressLint("MissingPermission")
     private fun getLastLocation() {
         try {
+            val loc: Location? = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+                    ?: throw NullPointerException()
+
             if(viewModel.canUpdate()) {
-                val loc: Location? = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
-                        ?: throw NullPointerException()
                 viewModel.getWeather(loc!!)
+            }
+            if (viewModel.canFutureUpdate()){
+                viewModel.getFutureWeather(loc!!)
             }
         }
         catch (e:Exception) {
