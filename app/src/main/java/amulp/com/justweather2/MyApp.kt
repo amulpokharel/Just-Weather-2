@@ -9,7 +9,6 @@ class MyApp : Application() {
 
     companion object {
         private var instance: MyApp? = null
-        var darkMode = false
 
         @JvmStatic
         fun getAppContext() : Context =  instance!!.applicationContext

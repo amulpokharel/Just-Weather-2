@@ -13,6 +13,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProviders
+import com.afollestad.aesthetic.Aesthetic
 import kotlinx.android.synthetic.main.main_activity.*
 import org.jetbrains.anko.*
 
@@ -22,17 +23,10 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
     override fun onCreate(savedInstanceState: Bundle?) {
         viewModel = ViewModelProviders.of(this).get(WeatherViewModel::class.java)
-
-        if(defaultSharedPreferences.getBoolean(getString(R.string.pref_dark_mode), false)) {
-            MyApp.darkMode = true
-            setTheme(R.style.AppThemeDark)
-        }
-        else {
-            MyApp.darkMode = false
-            setTheme(R.style.AppTheme)
-        }
-
         title = ""
+
+        Aesthetic.attach(this)
+
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
@@ -41,6 +35,16 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             supportFragmentManager.beginTransaction()
                     .replace(R.id.container, WeatherFragment.newInstance(), "current")
                     .commit()
+        }
+
+        if (Aesthetic.isFirstTime) {
+            Aesthetic.config {
+                colorPrimary(res = R.color.primaryDarkColor)
+                colorPrimaryDark(res = R.color.primaryDarkColor)
+                colorWindowBackground(res = R.color.primaryDarkColor)
+                textColorPrimary(res = R.color.secondaryTextColor)
+                colorNavigationBar(res = R.color.primaryDarkColor)
+            }
         }
 
         setSupportActionBar(toolbar)
@@ -87,17 +91,19 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
     override fun onResume() {
         super.onResume()
+        Aesthetic.resume(this)
         attachSharedPrefListener()
     }
 
     override fun onPause() {
-        super.onPause()
         detachSharedPrefListener()
+        Aesthetic.pause(this)
+        super.onPause()
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         detachSharedPrefListener()
+        super.onDestroy()
     }
 
     private fun attachSharedPrefListener() = defaultSharedPreferences.registerOnSharedPreferenceChangeListener(this)
@@ -107,7 +113,23 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     override fun onSharedPreferenceChanged(prefs:SharedPreferences, key: String) {
         when (key) {
             getString(R.string.pref_dark_mode) -> {
-                recreate()
+                if (!prefs.getBoolean("Dark Mode", false)) {
+                    Aesthetic.config {
+                        colorPrimary(res = R.color.primaryDarkColor)
+                        colorPrimaryDark(res = R.color.primaryDarkColor)
+                        colorWindowBackground(res = R.color.primaryDarkColor)
+                        textColorPrimary(res = R.color.secondaryTextColor)
+                        colorNavigationBar(res = R.color.primaryDarkColor)
+                    }
+                }else{
+                    Aesthetic.config {
+                        colorPrimary(res = R.color.secondaryDarkColor)
+                        colorPrimaryDark(res = R.color.secondaryDarkColor)
+                        colorWindowBackground(res = R.color.secondaryDarkColor)
+                        textColorPrimary(res = R.color.secondaryTextColor)
+                        colorNavigationBar(res = R.color.secondaryDarkColor)
+                    }
+                }
             }
             "current unit" -> {
                 viewModel.updateUnit()
