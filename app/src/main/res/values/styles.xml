@@ -1,10 +1,9 @@
 <resources>
-
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
+        <item name="element_color">#ffffff</item>
         <item name="android:windowAnimationStyle">@style/WindowAnimationTransition</item>
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
     </style>
 
     <style name="WindowAnimationTransition">

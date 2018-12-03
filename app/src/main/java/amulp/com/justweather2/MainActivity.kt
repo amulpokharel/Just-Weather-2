@@ -6,6 +6,7 @@ import amulp.com.justweather2.ui.weather.WeatherViewModel
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
@@ -16,6 +17,9 @@ import androidx.lifecycle.ViewModelProviders
 import com.afollestad.aesthetic.Aesthetic
 import kotlinx.android.synthetic.main.main_activity.*
 import org.jetbrains.anko.*
+import android.R.color
+
+
 
 
 class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
@@ -44,6 +48,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 colorWindowBackground(res = R.color.primaryDarkColor)
                 textColorPrimary(res = R.color.secondaryTextColor)
                 colorNavigationBar(res = R.color.primaryDarkColor)
+                attribute(R.attr.element_color, R.color.secondaryTextColor)
             }
         }
 
@@ -112,23 +117,22 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
     override fun onSharedPreferenceChanged(prefs:SharedPreferences, key: String) {
         when (key) {
-            getString(R.string.pref_dark_mode) -> {
-                if (!prefs.getBoolean("Dark Mode", false)) {
-                    Aesthetic.config {
-                        colorPrimary(res = R.color.primaryDarkColor)
-                        colorPrimaryDark(res = R.color.primaryDarkColor)
-                        colorWindowBackground(res = R.color.primaryDarkColor)
-                        textColorPrimary(res = R.color.secondaryTextColor)
-                        colorNavigationBar(res = R.color.primaryDarkColor)
-                    }
-                }else{
-                    Aesthetic.config {
-                        colorPrimary(res = R.color.secondaryDarkColor)
-                        colorPrimaryDark(res = R.color.secondaryDarkColor)
-                        colorWindowBackground(res = R.color.secondaryDarkColor)
-                        textColorPrimary(res = R.color.secondaryTextColor)
-                        colorNavigationBar(res = R.color.secondaryDarkColor)
-                    }
+            getString(R.string.background_color) -> {
+                val color = prefs.getInt("Background Color", 117592)
+                Aesthetic.config {
+                    colorPrimary(color)
+                    colorPrimaryDark(color)
+                    colorWindowBackground(color)
+                    colorNavigationBar(color)
+                }
+            }
+            getString(R.string.text_color) -> {
+                val color = prefs.getInt("Text Color", 16777215)
+                Aesthetic.config {
+                    textColorPrimary(color)
+                    textColorPrimaryInverse(color)
+                    attribute(R.attr.element_color, color)
+                    colorAccent(color)
                 }
             }
             "current unit" -> {
