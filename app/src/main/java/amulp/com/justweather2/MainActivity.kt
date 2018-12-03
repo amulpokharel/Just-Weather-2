@@ -124,6 +124,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                     colorPrimaryDark(color)
                     colorWindowBackground(color)
                     colorNavigationBar(color)
+                    colorStatusBar(color)
                 }
             }
             getString(R.string.text_color) -> {

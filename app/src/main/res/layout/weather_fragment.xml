@@ -36,7 +36,8 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.262"
-            app:srcCompat="?android:attr/textCheckMark" />
+            app:srcCompat="?android:attr/textCheckMark"
+            tools:text="w" />
 
 
         <TableLayout
@@ -142,7 +143,7 @@
         <TextView
             android:id="@+id/title3"
             android:layout_width="72dp"
-            android:layout_height="32dp"
+            android:layout_height="wrap_content"
             android:gravity="bottom|center"
             android:text="+3h"
             android:textAlignment="center"
@@ -158,7 +159,7 @@
         <TextView
             android:id="@+id/title6"
             android:layout_width="73dp"
-            android:layout_height="32dp"
+            android:layout_height="wrap_content"
             android:gravity="bottom|center"
             android:text="+6h"
             android:textAlignment="center"
@@ -174,7 +175,7 @@
         <TextView
             android:id="@+id/title9"
             android:layout_width="72dp"
-            android:layout_height="32dp"
+            android:layout_height="wrap_content"
             android:gravity="bottom|center"
             android:text="+9h"
             android:textAlignment="center"
@@ -190,7 +191,7 @@
         <TextView
             android:id="@+id/title12"
             android:layout_width="73dp"
-            android:layout_height="32dp"
+            android:layout_height="wrap_content"
             android:gravity="bottom|center"
             android:text="+12h"
             android:textAlignment="center"
@@ -206,7 +207,7 @@
         <TextView
             android:id="@+id/title15"
             android:layout_width="73dp"
-            android:layout_height="32dp"
+            android:layout_height="wrap_content"
             android:gravity="bottom|center"
             android:text="+15h"
             android:textAlignment="center"
@@ -222,13 +223,13 @@
         <TextView
             android:id="@+id/hour3"
             android:layout_width="72dp"
-            android:layout_height="32dp"
+            android:layout_height="wrap_content"
             android:fontFamily="@font/weatherfont"
             android:gravity="center"
             android:text="@{weatherData.forecastList[0].icon}"
             android:textAlignment="center"
             android:textColor="?element_color"
-            android:textSize="32sp"
+            android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/temp3"
             app:layout_constraintEnd_toStartOf="@+id/hour6"
@@ -239,13 +240,13 @@
         <TextView
             android:id="@+id/hour6"
             android:layout_width="73dp"
-            android:layout_height="32dp"
+            android:layout_height="wrap_content"
             android:fontFamily="@font/weatherfont"
             android:gravity="center"
             android:text="@{weatherData.forecastList[1].icon}"
             android:textAlignment="center"
             android:textColor="?element_color"
-            android:textSize="32sp"
+            android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/temp6"
             app:layout_constraintEnd_toStartOf="@+id/hour9"
@@ -256,13 +257,13 @@
         <TextView
             android:id="@+id/hour9"
             android:layout_width="72dp"
-            android:layout_height="32dp"
+            android:layout_height="wrap_content"
             android:fontFamily="@font/weatherfont"
             android:gravity="center"
             android:text="@{weatherData.forecastList[2].icon}"
             android:textAlignment="center"
             android:textColor="?element_color"
-            android:textSize="32sp"
+            android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/temp9"
             app:layout_constraintEnd_toStartOf="@+id/hour12"
@@ -273,13 +274,13 @@
         <TextView
             android:id="@+id/hour12"
             android:layout_width="73dp"
-            android:layout_height="32dp"
+            android:layout_height="wrap_content"
             android:fontFamily="@font/weatherfont"
             android:gravity="center"
             android:text="@{weatherData.forecastList[3].icon}"
             android:textAlignment="center"
             android:textColor="?element_color"
-            android:textSize="32sp"
+            android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/temp12"
             app:layout_constraintEnd_toStartOf="@+id/hour15"
@@ -290,13 +291,13 @@
         <TextView
             android:id="@+id/hour15"
             android:layout_width="73dp"
-            android:layout_height="32dp"
+            android:layout_height="wrap_content"
             android:fontFamily="@font/weatherfont"
             android:gravity="center"
             android:text="@{weatherData.forecastList[4].icon}"
             android:textAlignment="center"
             android:textColor="?element_color"
-            android:textSize="32sp"
+            android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/temp15"
             app:layout_constraintEnd_toEndOf="parent"
@@ -307,7 +308,7 @@
         <TextView
             android:id="@+id/temp3"
             android:layout_width="72dp"
-            android:layout_height="32dp"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:gravity="center"
             android:text="@{weatherData.forecastList[0].tempText}"
@@ -323,7 +324,7 @@
         <TextView
             android:id="@+id/temp6"
             android:layout_width="73dp"
-            android:layout_height="32dp"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:gravity="center"
             android:text="@{weatherData.forecastList[1].tempText}"
@@ -339,7 +340,7 @@
         <TextView
             android:id="@+id/temp9"
             android:layout_width="72dp"
-            android:layout_height="32dp"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:gravity="center"
             android:text="@{weatherData.forecastList[2].tempText}"
@@ -355,7 +356,7 @@
         <TextView
             android:id="@+id/temp12"
             android:layout_width="73dp"
-            android:layout_height="32dp"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:gravity="center"
             android:text="@{weatherData.forecastList[3].tempText}"
@@ -372,7 +373,7 @@
         <TextView
             android:id="@+id/temp15"
             android:layout_width="73dp"
-            android:layout_height="32dp"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:gravity="center"
             android:text="@{weatherData.forecastList[4].tempText}"
