@@ -27,7 +27,7 @@ class WeatherViewModel : ViewModel(){
     private var currentWeather: CurrentWeather? = null
     private var weatherList: WeatherList? = null
     private val UPDATE_INTERVAL = 600000
-    private val FUTURE_UPDATE_INTERVAL = 0
+    private val FUTURE_UPDATE_INTERVAL = 600000
 
     private val disposable = CompositeDisposable()
 
@@ -62,6 +62,36 @@ class WeatherViewModel : ViewModel(){
         weatherIcon.set(prefs["weather icon", "\uF07B"]!!)
 
         currentTemp = Temperature(prefs["current temp", 0]!!)
+
+        forecastList[0].apply {
+            setTemp(prefs["temp1", 0]!!)
+            icon.set(prefs["icon1", "\uF07B"]!!)
+            setUnit(currentUnit!!)
+        }
+
+        forecastList[1].apply {
+            setTemp(prefs["temp2", 0]!!)
+            icon.set(prefs["icon2", "\uF07B"]!!)
+            setUnit(currentUnit!!)
+        }
+
+        forecastList[2].apply {
+            setTemp(prefs["temp3", 0]!!)
+            icon.set(prefs["icon3", "\uF07B"]!!)
+            setUnit(currentUnit!!)
+        }
+
+        forecastList[3].apply {
+            setTemp(prefs["temp4", 0]!!)
+            icon.set(prefs["icon4", "\uF07B"]!!)
+            setUnit(currentUnit!!)
+        }
+
+        forecastList[4].apply {
+            setTemp(prefs["temp5", 0]!!)
+            icon.set(prefs["icon5", "\uF07B"]!!)
+            setUnit(currentUnit!!)
+        }
 
         service = RetrofitClient.getClient()
     }
@@ -171,7 +201,17 @@ class WeatherViewModel : ViewModel(){
                 }
             }
         }
-        print("temp")
+
+        prefs["temp1"] = forecastList[0].getTemp()
+        prefs["icon1"] = forecastList[0].icon.get()
+        prefs["temp2"] = forecastList[1].getTemp()
+        prefs["icon2"] = forecastList[1].icon.get()
+        prefs["temp3"] = forecastList[2].getTemp()
+        prefs["icon3"] = forecastList[2].icon.get()
+        prefs["temp4"] = forecastList[3].getTemp()
+        prefs["icon4"] = forecastList[3].icon.get()
+        prefs["temp5"] = forecastList[4].getTemp()
+        prefs["icon5"] = forecastList[4].icon.get()
     }
 
     fun canUpdate() : Boolean = System.currentTimeMillis() >= (lastChecked!! + UPDATE_INTERVAL)
