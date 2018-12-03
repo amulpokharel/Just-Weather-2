@@ -6,7 +6,6 @@ import amulp.com.justweather2.ui.weather.WeatherViewModel
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.Color
 import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
@@ -17,9 +16,6 @@ import androidx.lifecycle.ViewModelProviders
 import com.afollestad.aesthetic.Aesthetic
 import kotlinx.android.synthetic.main.main_activity.*
 import org.jetbrains.anko.*
-import android.R.color
-
-
 
 
 class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener {

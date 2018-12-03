@@ -29,17 +29,6 @@
                                           </PersistentState>
                                         </value>
                                       </entry>
-                                      <entry key="clipartAsset">
-                                        <value>
-                                          <PersistentState>
-                                            <option name="values">
-                                              <map>
-                                                <entry key="url" value="jar:file:/Applications/Android%20Studio%20Canary.app/Contents/plugins/android/lib/android.jar!/images/material_design_icons/navigation/ic_arrow_back_black_24dp.xml" />
-                                              </map>
-                                            </option>
-                                          </PersistentState>
-                                        </value>
-                                      </entry>
                                       <entry key="textAsset">
                                         <value>
                                           <PersistentState>
@@ -125,7 +114,6 @@
                                       <entry key="backgroundImage" value="$USER_HOME$/Downloads/Untitled (1).svg" />
                                       <entry key="foregroundAssetType" value="TEXT" />
                                       <entry key="foregroundImage" value="$USER_HOME$/Downloads/Untitledg (1).svg" />
-                                      <entry key="legacyIconShape" value="CIRCLE" />
                                     </map>
                                   </option>
                                 </PersistentState>
