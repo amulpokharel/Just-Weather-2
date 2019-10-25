@@ -5,7 +5,6 @@ import amulp.com.justweather2.models.subclasses.Temperature
 import amulp.com.justweather2.rest.RetrofitClient
 import amulp.com.justweather2.utils.PrefHelper
 import amulp.com.justweather2.utils.PrefHelper.get
-import amulp.com.justweather2.utils.PrefHelper.set
 import android.annotation.SuppressLint
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
@@ -49,7 +48,7 @@ class JustWeatherWidget : AppWidgetProvider() {
             val locationListener: LocationListener = object : LocationListener {
                 @SuppressLint("MissingPermission")
                 override fun onLocationChanged(location: Location) {
-                    updateWeather()
+                    updateWeather(location)
                     locationManager.removeUpdates(this)
                 }
                 override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
@@ -94,9 +93,9 @@ class JustWeatherWidget : AppWidgetProvider() {
 
             //check sharedpref for unit, update accordingly
             when(prefs["current unit", "c"]){
-                "c" -> weatherText.set(currentTemp!!.inCelsius().toString() + " °C")
-                "f" -> weatherText.set(currentTemp!!.inFahrenheit().toString() + " °F")
-                "k" -> weatherText.set(currentTemp!!.inKelvin().toString() + " °K")
+                //"c" -> weatherText.set(currentTemp.inCelsius().toString() + " °C")
+                //"f" -> weatherText.set(currentTemp.inFahrenheit().toString() + " °F")
+                //"k" -> weatherText.set(currentTemp.inKelvin().toString() + " °K")
             }
         }
     }
