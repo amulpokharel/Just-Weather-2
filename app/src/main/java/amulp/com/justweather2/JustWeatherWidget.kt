@@ -92,11 +92,11 @@ class JustWeatherWidget : AppWidgetProvider() {
             val prefs: SharedPreferences = PrefHelper.defaultPrefs(MyApp.getAppContext())
 
             //check sharedpref for unit, update accordingly
-            when(prefs["current unit", "c"]){
+            //when(prefs["current unit", "c"]){
                 //"c" -> weatherText.set(currentTemp.inCelsius().toString() + " °C")
                 //"f" -> weatherText.set(currentTemp.inFahrenheit().toString() + " °F")
                 //"k" -> weatherText.set(currentTemp.inKelvin().toString() + " °K")
-            }
+            //}
         }
     }
 }

@@ -4,6 +4,7 @@ import amulp.com.justweather2.MyApp
 import amulp.com.justweather2.R
 import amulp.com.justweather2.models.subclasses.Temperature
 import androidx.databinding.ObservableField
+import java.util.*
 
 data class FutureWeatherElement(private var _temperature:Temperature = Temperature(0), var tempText: ObservableField<String> = ObservableField(""), var icon:ObservableField<String> = ObservableField("")){
     private var currentUnit:String = "c"
@@ -16,7 +17,7 @@ data class FutureWeatherElement(private var _temperature:Temperature = Temperatu
     fun getTemp() = _temperature.inCelsius()
     fun setUnit(str:String){
         currentUnit = str
-        when(currentUnit.toLowerCase()){
+        when (currentUnit.toLowerCase(Locale.ROOT)){
             "c" -> changeToC()
             "f" -> changeToF()
             "k" -> changeToK()
@@ -25,7 +26,7 @@ data class FutureWeatherElement(private var _temperature:Temperature = Temperatu
     }
     fun setTemp(temp:Int) {
         _temperature.setTemp(temp)
-        when(currentUnit.toLowerCase()){
+        when(currentUnit.toLowerCase(Locale.ROOT)) {
             "c" -> changeToC()
             "f" -> changeToF()
             "k" -> changeToK()

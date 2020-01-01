@@ -4,7 +4,7 @@ apply plugin: "kotlin-android-extensions"
 apply plugin: "kotlin-kapt"
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     defaultConfig {
         applicationId "amulp.com.justweather2"
         minSdkVersion 21
@@ -44,6 +44,11 @@ dependencies {
     implementation "androidx.appcompat:appcompat:1.1.0"
     implementation "com.google.android.material:material:1.0.0"
     implementation "androidx.preference:preference:1.1.0"
+
+    //compose
+    implementation 'androidx.ui:ui-tooling:0.1.0-dev02'
+    implementation 'androidx.ui:ui-layout:0.1.0-dev02'
+    implementation 'androidx.ui:ui-material:0.1.0-dev02'
 
     //ConstraintLayout
     implementation "androidx.constraintlayout:constraintlayout:1.1.3"

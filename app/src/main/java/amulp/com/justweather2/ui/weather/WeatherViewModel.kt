@@ -11,6 +11,7 @@ import amulp.com.justweather2.rest.WeatherService
 import amulp.com.justweather2.utils.PrefHelper.defaultPrefs
 import amulp.com.justweather2.utils.PrefHelper.get
 import amulp.com.justweather2.utils.PrefHelper.set
+import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.location.Location
 import androidx.databinding.ObservableField
@@ -143,7 +144,7 @@ class WeatherViewModel : ViewModel(){
                 "k" -> {
                     weatherText.set(currentTemp!!.inKelvin().toString() + " °K")
                     for(e in forecastList)
-                        e.changeToF()
+                        e.changeToK()
                 }
             }
             prefs["weather text"] = weatherText.get()
@@ -188,6 +189,17 @@ class WeatherViewModel : ViewModel(){
         prefs["location"] = locationName.get()
         prefs["weather icon"] = weatherIcon.get()
         prefs["current temp"] = currentTemp!!.inCelsius()
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    fun lastCheckedOffset(hourOffset:Int): String {
+        val formatted =  SimpleDateFormat("h:mm a").format(Date(lastChecked!! + (3600000 * hourOffset)))
+
+        return if(hourOffset == 0){
+            "Last Updated: $formatted"
+        } else{
+            formatted
+        }
     }
 
     private fun processFutureWeather(weatherList: WeatherList){

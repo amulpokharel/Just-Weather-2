@@ -38,7 +38,7 @@ class WeatherFragment : Fragment() {
                               savedInstanceState: Bundle?): View {
         viewModel = ViewModelProviders.of(this).get(WeatherViewModel::class.java)
         val binding:WeatherFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.weather_fragment, container, false)
-        binding.setLifecycleOwner(this)
+        binding.lifecycleOwner = this
         binding.weatherData = viewModel
 
         locationManager = activity!!.getSystemService(Context.LOCATION_SERVICE) as LocationManager
