@@ -67,30 +67,35 @@ class WeatherViewModel : ViewModel(){
         forecastList[0].apply {
             setTemp(prefs["temp1", 0]!!)
             icon.set(prefs["icon1", "\uF07B"]!!)
+            time.set(prefs["time1"])
             setUnit(currentUnit!!)
         }
 
         forecastList[1].apply {
             setTemp(prefs["temp2", 0]!!)
             icon.set(prefs["icon2", "\uF07B"]!!)
+            time.set(prefs["time2"])
             setUnit(currentUnit!!)
         }
 
         forecastList[2].apply {
             setTemp(prefs["temp3", 0]!!)
             icon.set(prefs["icon3", "\uF07B"]!!)
+            time.set(prefs["time3"])
             setUnit(currentUnit!!)
         }
 
         forecastList[3].apply {
             setTemp(prefs["temp4", 0]!!)
             icon.set(prefs["icon4", "\uF07B"]!!)
+            time.set(prefs["time4"])
             setUnit(currentUnit!!)
         }
 
         forecastList[4].apply {
             setTemp(prefs["temp5", 0]!!)
             icon.set(prefs["icon5", "\uF07B"]!!)
+            time.set(prefs["time5"])
             setUnit(currentUnit!!)
         }
 
@@ -205,7 +210,7 @@ class WeatherViewModel : ViewModel(){
     private fun processFutureWeather(weatherList: WeatherList){
         for (i in 0..4) {
             forecastList[i].apply {
-                setValues(weatherList.list[i].main.temp.toInt() , weatherList.list[i].weather[0].icon)
+                setValues(weatherList.list[i].main.temp.toInt() , weatherList.list[i].weather[0].icon, weatherList.list[i].dt)
                 when(currentUnit){
                     "f" -> changeToF()
                     "k" -> changeToK()
@@ -213,17 +218,21 @@ class WeatherViewModel : ViewModel(){
                 }
             }
         }
-
         prefs["temp1"] = forecastList[0].getTemp()
         prefs["icon1"] = forecastList[0].icon.get()
+        prefs["time1"] = forecastList[0].time.get()
         prefs["temp2"] = forecastList[1].getTemp()
         prefs["icon2"] = forecastList[1].icon.get()
+        prefs["time2"] = forecastList[1].time.get()
         prefs["temp3"] = forecastList[2].getTemp()
         prefs["icon3"] = forecastList[2].icon.get()
+        prefs["time3"] = forecastList[2].time.get()
         prefs["temp4"] = forecastList[3].getTemp()
         prefs["icon4"] = forecastList[3].icon.get()
+        prefs["time4"] = forecastList[3].time.get()
         prefs["temp5"] = forecastList[4].getTemp()
         prefs["icon5"] = forecastList[4].icon.get()
+        prefs["time5"] = forecastList[4].time.get()
     }
 
     fun canUpdate() : Boolean = System.currentTimeMillis() >= (lastChecked!! + UPDATE_INTERVAL)

@@ -3,14 +3,18 @@ package amulp.com.justweather2.models
 import amulp.com.justweather2.MyApp
 import amulp.com.justweather2.R
 import amulp.com.justweather2.models.subclasses.Temperature
+import android.annotation.SuppressLint
 import androidx.databinding.ObservableField
+import java.text.SimpleDateFormat
 import java.util.*
 
-data class FutureWeatherElement(private var _temperature:Temperature = Temperature(0), var tempText: ObservableField<String> = ObservableField(""), var icon:ObservableField<String> = ObservableField("")){
+data class FutureWeatherElement(private var _temperature:Temperature = Temperature(0), var tempText: ObservableField<String> = ObservableField(""), var icon:ObservableField<String> = ObservableField(""), var time:ObservableField<String> = ObservableField("")){
     private var currentUnit:String = "c"
-    fun setValues(temp: Int, icon:String){
+    @SuppressLint("SimpleDateFormat")
+    fun setValues(temp: Int, icon:String, time:Long){
         _temperature.setTemp(temp)
         this.tempText.set(_temperature.inCelsius().toString() + " °C")
+        this.time.set(SimpleDateFormat("h:mm a").format(Date(time * 1000)))
         this.icon.set(resolveResource("w$icon"))
     }
 
