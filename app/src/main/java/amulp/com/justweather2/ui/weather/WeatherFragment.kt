@@ -18,6 +18,8 @@ import androidx.core.content.PermissionChecker
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 
 class WeatherFragment : Fragment() {
 
@@ -103,11 +105,15 @@ class WeatherFragment : Fragment() {
             val loc: Location? = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
                     ?: throw NullPointerException()
 
-            if(viewModel.canUpdate()) {
-                viewModel.getWeather(loc!!)
+            viewModel.viewModelScope.launch{
+                if(viewModel.canUpdate()) {
+                    viewModel.getWeather(loc!!)
+                }
             }
-            if (viewModel.canFutureUpdate()){
-                viewModel.getFutureWeather(loc!!)
+            viewModel.viewModelScope.launch {
+                if (viewModel.canFutureUpdate()) {
+                    viewModel.getFutureWeather(loc!!)
+                }
             }
         }
         catch (e:Exception) {
@@ -139,14 +145,18 @@ class WeatherFragment : Fragment() {
                 latitude = 0.0
                 longitude = 0.0
             }
-            viewModel.getWeather(location)
+            viewModel.viewModelScope.launch{
+                viewModel.getWeather(location)
+            }
         }
     }
 
     private val locationListener: LocationListener = object : LocationListener {
         @SuppressLint("MissingPermission")
         override fun onLocationChanged(location: Location) {
-            viewModel.getWeather(location)
+            viewModel.viewModelScope.launch {
+                viewModel.getWeather(location)
+            }
             locationManager.removeUpdates(this)
         }
         override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}

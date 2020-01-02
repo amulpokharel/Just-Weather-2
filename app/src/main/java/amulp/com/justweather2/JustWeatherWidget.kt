@@ -4,7 +4,6 @@ import amulp.com.justweather2.models.CurrentWeather
 import amulp.com.justweather2.models.subclasses.Temperature
 import amulp.com.justweather2.rest.RetrofitClient
 import amulp.com.justweather2.utils.PrefHelper
-import amulp.com.justweather2.utils.PrefHelper.get
 import android.annotation.SuppressLint
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
@@ -15,8 +14,6 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import android.widget.RemoteViews
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 
 class JustWeatherWidget : AppWidgetProvider() {
 
@@ -76,14 +73,9 @@ class JustWeatherWidget : AppWidgetProvider() {
         }
 
         private fun updateWeather(loc:Location){
-            val client = RetrofitClient.getClient()
+            val service = RetrofitClient.getClient()
+            //val result = service.getWeather(loc.longitude, loc.latitude)
 
-            client.getWeather(loc.longitude, loc.latitude)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { result ->
-                        processWeather(result)
-                    }
 
         }
 

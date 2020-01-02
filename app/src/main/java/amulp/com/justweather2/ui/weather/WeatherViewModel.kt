@@ -16,9 +16,8 @@ import android.content.SharedPreferences
 import android.location.Location
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -29,8 +28,6 @@ class WeatherViewModel : ViewModel(){
     private var weatherList: WeatherList? = null
     private val UPDATE_INTERVAL = 600000
     private val FUTURE_UPDATE_INTERVAL = 600000
-
-    private val disposable = CompositeDisposable()
 
     //UI Variables
     var weatherIcon:ObservableField<String> = ObservableField("I")
@@ -102,33 +99,30 @@ class WeatherViewModel : ViewModel(){
         service = RetrofitClient.getClient()
     }
 
-    fun getWeather(location:Location){
-        loc = location
-        if(canUpdate()) {
-            disposable.add(service.getWeather(location.longitude, location.latitude)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { result ->
-                        currentWeather = result
-                        lastChecked = System.currentTimeMillis()
-                        prefs["last checked"] = lastChecked
-                        processWeather(result)
-                    })
+    suspend fun getWeather(location:Location){
+        if(canUpdate()){
+            val result = service.getWeather(location.longitude, location.latitude)
+
+            currentWeather = result
+            lastChecked = System.currentTimeMillis()
+            prefs["last checked"] = lastChecked
+            withContext(Dispatchers.IO) {
+                processWeather(result)
+            }
         }
     }
 
-    fun getFutureWeather(location: Location){
-        loc = location
-        if(canFutureUpdate()) {
-            disposable.add(service.getFutureWeather(location.longitude, location.latitude)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { result ->
-                        weatherList = result
-                        lastFutureChecked = System.currentTimeMillis()
-                        prefs["last future checked"] = lastFutureChecked
-                        processFutureWeather(result)
-                    })
+    suspend fun getFutureWeather(location: Location){
+        if(canFutureUpdate()){
+            val result = service.getFutureWeather(location.longitude, location.latitude)
+
+            weatherList = result
+            lastFutureChecked = System.currentTimeMillis()
+            prefs["last future checked"] = lastFutureChecked
+
+            withContext(Dispatchers.IO) {
+                processFutureWeather(result)
+            }
         }
     }
 
@@ -156,11 +150,6 @@ class WeatherViewModel : ViewModel(){
 
 
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        disposable.dispose()
     }
 
     private fun resolveResource(str:String) : String{

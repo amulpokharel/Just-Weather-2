@@ -9,7 +9,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 /**
@@ -61,7 +60,6 @@ object RetrofitClient {
         client = Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .client(okHttpClientBuilder.build())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(MoshiConverterFactory.create(moshi))
                 .build()
 
