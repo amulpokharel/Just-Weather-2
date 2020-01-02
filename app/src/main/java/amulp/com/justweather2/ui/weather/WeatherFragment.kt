@@ -17,7 +17,7 @@ import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.core.content.PermissionChecker
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 
 class WeatherFragment : Fragment() {
 
@@ -36,7 +36,7 @@ class WeatherFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        viewModel = ViewModelProviders.of(this).get(WeatherViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(WeatherViewModel::class.java)
         val binding:WeatherFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.weather_fragment, container, false)
         binding.lifecycleOwner = this
         binding.weatherData = viewModel

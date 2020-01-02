@@ -12,7 +12,7 @@ import android.provider.Settings
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.afollestad.aesthetic.Aesthetic
 import kotlinx.android.synthetic.main.main_activity.*
 import org.jetbrains.anko.*
@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     private lateinit var viewModel: WeatherViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        viewModel = ViewModelProviders.of(this).get(WeatherViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(WeatherViewModel::class.java)
         title = ""
 
         Aesthetic.attach(this)

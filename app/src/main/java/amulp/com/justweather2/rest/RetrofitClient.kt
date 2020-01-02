@@ -1,6 +1,8 @@
 package amulp.com.justweather2.rest
 
 import amulp.com.justweather2.utils.toastError
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -34,7 +36,7 @@ object RetrofitClient {
 
             doAsync {
                 uiThread {
-                    when (response.code()) {
+                    when (response.code) {
                         400 -> "Operation Failed".toastError()
                         403 -> "User Error".toastError()
                         404 -> "User or Password Error".toastError()
@@ -52,12 +54,15 @@ object RetrofitClient {
                 val newRequest = builder.build()
 
                 chain.proceed(newRequest) }*/
+        val moshi = Moshi.Builder()
+            .add(KotlinJsonAdapterFactory())
+            .build()
 
         client = Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .client(okHttpClientBuilder.build())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(MoshiConverterFactory.create())
+                .addConverterFactory(MoshiConverterFactory.create(moshi))
                 .build()
 
         initialized = true
