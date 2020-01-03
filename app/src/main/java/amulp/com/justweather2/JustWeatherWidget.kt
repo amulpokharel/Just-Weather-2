@@ -4,6 +4,7 @@ import amulp.com.justweather2.models.CurrentWeather
 import amulp.com.justweather2.models.subclasses.Temperature
 import amulp.com.justweather2.rest.RetrofitClient
 import amulp.com.justweather2.utils.PrefHelper
+import amulp.com.justweather2.utils.PrefHelper.get
 import android.annotation.SuppressLint
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
@@ -14,6 +15,10 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import android.widget.RemoteViews
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+
 
 class JustWeatherWidget : AppWidgetProvider() {
 
@@ -45,7 +50,7 @@ class JustWeatherWidget : AppWidgetProvider() {
             val locationListener: LocationListener = object : LocationListener {
                 @SuppressLint("MissingPermission")
                 override fun onLocationChanged(location: Location) {
-                    updateWeather(location)
+                    updateWeather(location, context)
                     locationManager.removeUpdates(this)
                 }
                 override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
@@ -57,7 +62,7 @@ class JustWeatherWidget : AppWidgetProvider() {
                 try {
                     val loc: Location? = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
                             ?: throw NullPointerException()
-                    updateWeather(loc!!)
+                    updateWeather(loc!!, context)
                 }
                 catch (e:Exception) {
                     locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0L, 0f, locationListener)
@@ -72,23 +77,32 @@ class JustWeatherWidget : AppWidgetProvider() {
             appWidgetManager.updateAppWidget(appWidgetId, views)
         }
 
-        private fun updateWeather(loc:Location){
+        private fun updateWeather(loc:Location, context: Context){
             val service = RetrofitClient.getClient()
-            //val result = service.getWeather(loc.longitude, loc.latitude)
+            GlobalScope.launch(Dispatchers.IO){
+                val result = service.getWeather(loc.longitude, loc.latitude)
+                val currentTemp = Temperature(result.main.temp)
+                val prefs: SharedPreferences = PrefHelper.defaultPrefs(MyApp.getAppContext())
 
-
+                val tempText = when(prefs["current unit", "c"]){
+                    "c" -> currentTemp.inCelsius().toString() + " °C"
+                    "f" -> currentTemp.inFahrenheit().toString() + " °F"
+                    "k" -> currentTemp.inKelvin().toString() + " °K"
+                    else -> "0 °C"
+                }
+                processWeather(tempText)
+            }
         }
 
-        private fun processWeather(currentWeather: CurrentWeather){
-            val currentTemp = Temperature(currentWeather.main.temp)
+        private fun processWeather(currentWeather: String){
             val prefs: SharedPreferences = PrefHelper.defaultPrefs(MyApp.getAppContext())
 
             //check sharedpref for unit, update accordingly
-            //when(prefs["current unit", "c"]){
-                //"c" -> weatherText.set(currentTemp.inCelsius().toString() + " °C")
-                //"f" -> weatherText.set(currentTemp.inFahrenheit().toString() + " °F")
-                //"k" -> weatherText.set(currentTemp.inKelvin().toString() + " °K")
-            //}
+/*            when(prefs["current unit", "c"]){
+                "c" -> weatherText.set(currentTemp.inCelsius().toString() + " °C")
+                "f" -> weatherText.set(currentTemp.inFahrenheit().toString() + " °F")
+                "k" -> weatherText.set(currentTemp.inKelvin().toString() + " °K")
+            }*/
         }
     }
 }
