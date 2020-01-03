@@ -3,6 +3,7 @@ package amulp.com.justweather2
 import amulp.com.justweather2.ui.settings.SettingsFragment
 import amulp.com.justweather2.ui.weather.WeatherFragment
 import amulp.com.justweather2.ui.weather.WeatherViewModel
+import amulp.com.justweather2.utils.toast
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -10,19 +11,22 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
 import android.view.MenuItem
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
+import androidx.preference.PreferenceManager
 import com.afollestad.aesthetic.Aesthetic
 import kotlinx.android.synthetic.main.main_activity.*
-import org.jetbrains.anko.*
 
 
 class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
     private lateinit var viewModel: WeatherViewModel
+    private lateinit var defaultSharedPreferences:SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         viewModel = ViewModelProvider(this).get(WeatherViewModel::class.java)
+        defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         title = ""
 
         Aesthetic.attach(this)
@@ -83,9 +87,11 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         val gpsEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
 
         if(!gpsEnabled) {
-            alert("Please enable location services for the app to function properly.", "Location seems to be disabled.") {
-                okButton { enableLocationSettings() }
-                noButton { toast("App will not work without location")}
+            AlertDialog.Builder(this).apply {
+                setTitle("Location seems to be disabled.")
+                setMessage("Please enable location services for the app to function properly.")
+                setPositiveButton("Ok"){ _, _ ->  enableLocationSettings()}
+                setNegativeButton("Cancel"){ _, _ ->  "App will not work without location".toast()}
             }.show()
         }
     }

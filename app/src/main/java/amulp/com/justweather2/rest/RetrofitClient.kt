@@ -3,11 +3,12 @@ package amulp.com.justweather2.rest
 import amulp.com.justweather2.utils.toastError
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.uiThread
+import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
@@ -33,13 +34,12 @@ object RetrofitClient {
             val request = chain.request()
             val response = chain.proceed(request)
 
-            doAsync {
-                uiThread {
-                    when (response.code) {
-                        400 -> "Operation Failed".toastError()
-                        403 -> "User Error".toastError()
-                        404 -> "User or Password Error".toastError()
-                    }
+
+            GlobalScope.launch(Dispatchers.Main){
+                when (response.code) {
+                    400 -> "Operation Failed".toastError()
+                    403 -> "User Error".toastError()
+                    404 -> "User or Password Error".toastError()
                 }
             }
 

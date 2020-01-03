@@ -2,7 +2,7 @@ package amulp.com.justweather2.ui.weather
 
 import amulp.com.justweather2.MyApp
 import amulp.com.justweather2.R
-import amulp.com.justweather2.models.CurrentWeather
+import amulp.com.justweather2.models.*
 import amulp.com.justweather2.models.FutureWeatherElement
 import amulp.com.justweather2.models.WeatherList
 import amulp.com.justweather2.models.subclasses.Temperature
@@ -43,7 +43,6 @@ class WeatherViewModel : ViewModel(){
     private var lastFutureChecked: Long?
     private var currentUnit:String?
 
-    private var loc: Location? = null
     private var currentTemp: Temperature? = null
     private val prefs:SharedPreferences = defaultPrefs(MyApp.getAppContext())
 
@@ -147,8 +146,6 @@ class WeatherViewModel : ViewModel(){
                 }
             }
             prefs["weather text"] = weatherText.get()
-
-
         }
     }
 
@@ -182,7 +179,7 @@ class WeatherViewModel : ViewModel(){
         prefs["last update"] = lastUpdate.get()
         prefs["location"] = locationName.get()
         prefs["weather icon"] = weatherIcon.get()
-        prefs["current temp"] = currentTemp!!.inCelsius()
+        prefs["current temp"] = currentTemp?.inCelsius()
     }
 
     @SuppressLint("SimpleDateFormat")
