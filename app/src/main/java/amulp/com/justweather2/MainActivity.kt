@@ -1,9 +1,12 @@
 package amulp.com.justweather2
 
+import amulp.com.justweather2.models.Constants
 import amulp.com.justweather2.ui.settings.SettingsFragment
 import amulp.com.justweather2.ui.weather.WeatherFragment
 import amulp.com.justweather2.ui.weather.WeatherViewModel
 import amulp.com.justweather2.utils.toast
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences

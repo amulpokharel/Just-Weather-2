@@ -16,7 +16,9 @@ import android.content.SharedPreferences
 import android.location.Location
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
@@ -108,6 +110,17 @@ class WeatherViewModel : ViewModel(){
             withContext(Dispatchers.IO) {
                 processWeather(result)
             }
+        }
+    }
+
+    suspend fun getTemp(location: Location): String {
+        val temp = Temperature(service.getWeather(location.longitude, location.latitude).main.temp)
+
+        return when(prefs["current unit", "c"]){
+            "c" -> temp.inCelsius().toString() + " °C"
+            "f" -> temp.inFahrenheit().toString() + " °F"
+            "k" -> temp.inKelvin().toString() + " °K"
+            else -> "0"
         }
     }
 

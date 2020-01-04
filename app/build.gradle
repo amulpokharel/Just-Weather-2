@@ -38,6 +38,7 @@ android {
     dataBinding {
         enabled = true
     }
+
     buildToolsVersion '29.0.2'
 }
 
@@ -72,11 +73,14 @@ dependencies {
     //OKHttp + Retrofit
     implementation 'com.squareup.okhttp3:okhttp:4.3.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.3.0'
-    implementation "com.squareup.retrofit2:retrofit:2.7.0"
+    implementation "com.squareup.retrofit2:retrofit:2.7.1"
 
     //Moshi for Json stuff
     implementation "com.squareup.moshi:moshi-kotlin:1.9.2"
-    implementation 'com.squareup.retrofit2:converter-moshi:2.7.0'
+    implementation 'com.squareup.retrofit2:converter-moshi:2.7.1'
+
+    //leakcanary
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.1'
 
     //Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

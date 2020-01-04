@@ -1,15 +1,15 @@
 package amulp.com.justweather2
 
-import amulp.com.justweather2.models.CurrentWeather
+import amulp.com.justweather2.models.Constants
 import amulp.com.justweather2.models.subclasses.Temperature
 import amulp.com.justweather2.rest.RetrofitClient
-import amulp.com.justweather2.utils.PrefHelper
-import amulp.com.justweather2.utils.PrefHelper.get
+import amulp.com.justweather2.rest.WeatherService
 import android.annotation.SuppressLint
+import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
-import android.content.SharedPreferences
+import android.content.Intent
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
@@ -17,7 +17,7 @@ import android.os.Bundle
 import android.widget.RemoteViews
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.async
 
 
 class JustWeatherWidget : AppWidgetProvider() {
@@ -43,67 +43,21 @@ class JustWeatherWidget : AppWidgetProvider() {
         internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager,
                                      appWidgetId: Int) {
 
-            val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-            val gpsEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-
-
-            val locationListener: LocationListener = object : LocationListener {
-                @SuppressLint("MissingPermission")
-                override fun onLocationChanged(location: Location) {
-                    updateWeather(location, context)
-                    locationManager.removeUpdates(this)
-                }
-                override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
-                override fun onProviderEnabled(provider: String) {}
-                override fun onProviderDisabled(provider: String) {}
-            }
-
-            if(gpsEnabled){
-                try {
-                    val loc: Location? = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
-                            ?: throw NullPointerException()
-                    updateWeather(loc!!, context)
-                }
-                catch (e:Exception) {
-                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0L, 0f, locationListener)
-                }
-
-            }
-
             // Construct the RemoteViews object
             val views = RemoteViews(context.packageName, R.layout.just_weather_widget)
+            views.setOnClickPendingIntent(R.id.weather_text,
+                getPendingIntent(context, 0))
 
             // Instruct the widget manager to update the widget
             appWidgetManager.updateAppWidget(appWidgetId, views)
         }
 
-        private fun updateWeather(loc:Location, context: Context){
-            val service = RetrofitClient.getClient()
-            GlobalScope.launch(Dispatchers.IO){
-                val result = service.getWeather(loc.longitude, loc.latitude)
-                val currentTemp = Temperature(result.main.temp)
-                val prefs: SharedPreferences = PrefHelper.defaultPrefs(MyApp.getAppContext())
-
-                val tempText = when(prefs["current unit", "c"]){
-                    "c" -> currentTemp.inCelsius().toString() + " °C"
-                    "f" -> currentTemp.inFahrenheit().toString() + " °F"
-                    "k" -> currentTemp.inKelvin().toString() + " °K"
-                    else -> "0 °C"
-                }
-                processWeather(tempText)
-            }
+        private fun getPendingIntent(context: Context, value: Int): PendingIntent {
+            val intent = Intent(context, MainActivity::class.java)
+            intent.action = Constants.UPDATE_WEATHER
+            return PendingIntent.getActivity(context, value, intent, 0)
         }
 
-        private fun processWeather(currentWeather: String){
-            val prefs: SharedPreferences = PrefHelper.defaultPrefs(MyApp.getAppContext())
-
-            //check sharedpref for unit, update accordingly
-/*            when(prefs["current unit", "c"]){
-                "c" -> weatherText.set(currentTemp.inCelsius().toString() + " °C")
-                "f" -> weatherText.set(currentTemp.inFahrenheit().toString() + " °F")
-                "k" -> weatherText.set(currentTemp.inKelvin().toString() + " °K")
-            }*/
-        }
     }
 }
 

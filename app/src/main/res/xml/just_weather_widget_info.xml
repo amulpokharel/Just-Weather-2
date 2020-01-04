@@ -2,6 +2,7 @@
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:initialKeyguardLayout="@layout/just_weather_widget"
     android:initialLayout="@layout/just_weather_widget"
+    android:configure="amulp.com.justweather2.WidgetConfigureActivity"
     android:minWidth="40dp"
     android:minHeight="40dp"
     android:previewImage="@drawable/example_appwidget_preview"
